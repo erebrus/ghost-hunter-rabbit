@@ -1,0 +1,290 @@
+[gd_scene load_steps=17 format=2]
+
+[ext_resource path="res://src/player/Hunter.tscn" type="PackedScene" id=1]
+[ext_resource path="res://src/enemies/EasyGhost.tscn" type="PackedScene" id=2]
+[ext_resource path="res://assets/gfx/png1x/bg-cave.png" type="Texture" id=3]
+[ext_resource path="res://src/level/CaveArea.tscn" type="PackedScene" id=4]
+[ext_resource path="res://src/enemies/EvilGhost.tscn" type="PackedScene" id=5]
+[ext_resource path="res://assets/gfx/world/checkpoint.png" type="Texture" id=6]
+[ext_resource path="res://src/level/Level.gd" type="Script" id=10]
+[ext_resource path="res://assets/sfx/12. Lose_Game/Lose_Game_01.wav" type="AudioStream" id=13]
+[ext_resource path="res://assets/sfx/13.Open_New_Level/Open_New_level_01.wav" type="AudioStream" id=14]
+[ext_resource path="res://assets/Complete_Level_02.wav" type="AudioStream" id=15]
+
+[sub_resource type="Shader" id=16]
+code = "shader_type canvas_item;
+
+uniform float SAMPLES = 11.0;
+const float WIDTH = 0.04734573810584494679397346954847;
+
+uniform vec2 blur_scale = vec2(1, 0);
+
+float gaussian(float x) {
+    float x_squared = x*x;
+
+    return WIDTH * exp((x_squared / (2.0 * SAMPLES)) * -1.0);
+}
+
+void fragment() {
+	vec2 scale = TEXTURE_PIXEL_SIZE * blur_scale;
+	
+	float weight = 0.0;
+	float total_weight = 0.0;
+	vec4 color = vec4(0.0);
+	
+	for(int i=-int(SAMPLES)/2; i < int(SAMPLES)/2; ++i) {
+		weight = gaussian(float(i));
+		color.rgb += texture(SCREEN_TEXTURE, SCREEN_UV + scale * vec2(float(i))).rgb * weight;
+		total_weight += weight;
+	}
+	
+	COLOR.rgb = color.rgb / total_weight;
+}"
+
+[sub_resource type="ShaderMaterial" id=17]
+shader = SubResource( 16 )
+shader_param/SAMPLES = 11.0
+shader_param/blur_scale = Vector2( 0.001, 0 )
+
+[sub_resource type="Shader" id=12]
+code = "shader_type canvas_item;
+render_mode blend_mix,unshaded;
+
+uniform float brightness : hint_range(-1, 1) = 0;
+uniform float contrast : hint_range(0, 3) = 1.0;
+uniform float saturation : hint_range(0, 3) = 1.0;
+
+uniform float redVal : hint_range(0, 1) = 1.0;
+uniform float greenVal : hint_range(0, 1) = 1.0;
+uniform float blueVal : hint_range(0, 1) = 1.0;
+
+uniform vec4 tint_color : hint_color = vec4(1.0, 1.0, 1.0, 1.0);
+uniform float tint_effect_factor : hint_range(0, 1) = 0.0;
+//---------------------------------------------
+//CONTRAST
+//---------------------------------------------
+mat4 contrastMatrix( float _contrast ){
+	float t = ( 1.0 - _contrast ) / 2.0;
+    return mat4( 
+		vec4(_contrast, 0, 0, 0),
+		vec4(0, _contrast, 0, 0),
+		vec4(0, 0, _contrast, 0),
+		vec4(t, t, t, 1));
+}
+//---------------------------------------------
+//BRIGHTNESS
+//---------------------------------------------
+mat4 brightnessMatrix( float _brightness ){
+    return mat4( vec4(1, 0, 0, 0),
+                 vec4(0, 1, 0, 0),
+                 vec4(0, 0, 1, 0),
+                 vec4(_brightness, _brightness, _brightness, 1));
+}
+//---------------------------------------------
+//SATURATION
+//---------------------------------------------
+mat4 saturationMatrix( float _saturation ){
+    vec3 luminance = vec3( 0.3086, 0.6094, 0.0820 );
+    float oneMinusSat = 1.0 - _saturation;
+	
+    vec3 red = vec3( luminance.x * oneMinusSat );
+    red+= vec3(_saturation, 0, 0)*redVal;
+    vec3 green = vec3( luminance.y * oneMinusSat );
+    green += vec3( 0,_saturation, 0 )*greenVal;
+    vec3 blue = vec3( luminance.z * oneMinusSat );
+    blue += vec3( 0, 0,_saturation )*blueVal;
+	
+    return mat4(vec4(red, 0),vec4(green,0),vec4(blue,0),vec4(0, 0, 0, 1));
+}
+
+//---------------------------------------------
+//fragment
+//---------------------------------------------
+void fragment() {
+	vec4 c = texture(SCREEN_TEXTURE, SCREEN_UV);
+	vec4 c2 = c * tint_color;
+	COLOR = brightnessMatrix( brightness ) * contrastMatrix( contrast ) *saturationMatrix( saturation ) * mix(c, c2, tint_effect_factor);
+}"
+
+[sub_resource type="ShaderMaterial" id=18]
+shader = SubResource( 12 )
+shader_param/brightness = 0.0
+shader_param/contrast = 1.0
+shader_param/saturation = 1.0
+shader_param/redVal = 1.0
+shader_param/greenVal = 1.0
+shader_param/blueVal = 1.0
+shader_param/tint_color = Color( 0.203922, 0.992157, 0.843137, 1 )
+shader_param/tint_effect_factor = 0.678
+
+[sub_resource type="Shader" id=14]
+code = "shader_type canvas_item;
+
+// Gonkee's fog shader for Godot 3 - full tutorial https://youtu.be/QEaTsz_0o44
+// If you use this shader, I would prefer it if you gave credit to me and my channel
+
+uniform vec4 ori_color:hint_color = vec4(0.35, 0.48, 0.95,1.);
+//uniform vec3 color = vec3(0.35, 0.48, 0.95);
+uniform int OCTAVES = 4;
+
+float rand(vec2 coord){
+	return fract(sin(dot(coord, vec2(56, 78)) * 1000.0) * 1000.0);
+}
+
+float noise(vec2 coord){
+	vec2 i = floor(coord);
+	vec2 f = fract(coord);
+
+	// 4 corners of a rectangle surrounding our point
+	float a = rand(i);
+	float b = rand(i + vec2(1.0, 0.0));
+	float c = rand(i + vec2(0.0, 1.0));
+	float d = rand(i + vec2(1.0, 1.0));
+
+	vec2 cubic = f * f * (3.0 - 2.0 * f);
+
+	return mix(a, b, cubic.x) + (c - a) * cubic.y * (1.0 - cubic.x) + (d - b) * cubic.x * cubic.y;
+}
+
+float fbm(vec2 coord){
+	float value = 0.0;
+	float scale = 0.5;
+
+	for(int i = 0; i < OCTAVES; i++){
+		value += noise(coord) * scale;
+		coord *= 2.0;
+		scale *= 0.5;
+	}
+	return value;
+}
+
+void fragment() {
+	vec2 coord = UV * 20.0;
+
+	vec2 motion = vec2( fbm(coord + vec2(TIME * -0.5, TIME * 0.5)) );
+
+	float final = fbm(coord + motion);
+
+	COLOR = vec4(ori_color.rgb, final * 0.5);
+}"
+
+[sub_resource type="ShaderMaterial" id=19]
+shader = SubResource( 14 )
+shader_param/ori_color = Color( 0.0313726, 0.0392157, 0.0588235, 1 )
+shader_param/OCTAVES = 7
+
+[node name="Level" type="Node2D"]
+script = ExtResource( 10 )
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="Far" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0.4, 1 )
+motion_mirroring = Vector2( 1024, 0 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="BG" type="Sprite" parent="ParallaxBackground/Far"]
+position = Vector2( 512, 298 )
+texture = ExtResource( 3 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Medium" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0.5, 1 )
+motion_mirroring = Vector2( 1024, 0 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="ColorRect" type="ColorRect" parent="ParallaxBackground/Medium"]
+material = SubResource( 17 )
+margin_right = 1017.0
+margin_bottom = 635.0
+
+[node name="Close" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0.8, 1 )
+motion_mirroring = Vector2( 1024, 0 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="VeryClose" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0.9, 1 )
+motion_mirroring = Vector2( 1024, 0 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Tilemaps" type="Node2D" parent="."]
+position = Vector2( 0, 60 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Level" parent="Tilemaps" instance=ExtResource( 4 )]
+
+[node name="EvilGhost" parent="Tilemaps/Level" instance=ExtResource( 5 )]
+position = Vector2( 1502, 132 )
+scale = Vector2( 0.5, 0.5 )
+
+[node name="Checkpoint" type="Sprite" parent="."]
+position = Vector2( 1453, 407 )
+scale = Vector2( 0.5, 0.5 )
+texture = ExtResource( 6 )
+
+[node name="EasyGhost" parent="." instance=ExtResource( 2 )]
+position = Vector2( 175, 182 )
+scale = Vector2( 0.5, 0.5 )
+
+[node name="Player" parent="." instance=ExtResource( 1 )]
+unique_name_in_owner = true
+position = Vector2( 46, 505 )
+scale = Vector2( 0.5, 0.5 )
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+scale = Vector2( 8, 8 )
+current = true
+limit_left = 0
+limit_top = 0
+limit_right = 4096
+limit_bottom = 600
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Foreground" type="Node2D" parent="."]
+
+[node name="Tint" type="ColorRect" parent="Foreground"]
+visible = false
+material = SubResource( 18 )
+margin_right = 1023.0
+margin_bottom = 637.0
+
+[node name="Fog" type="ColorRect" parent="Foreground"]
+visible = false
+material = SubResource( 19 )
+margin_right = 1023.0
+margin_bottom = 637.0
+
+[node name="HUDLayer" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="Sounds" type="Node2D" parent="."]
+
+[node name="StartLevel" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource( 14 )
+volume_db = -80.0
+bus = "sfx"
+
+[node name="GameOver" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource( 13 )
+volume_db = -80.0
+bus = "sfx"
+
+[node name="LevelComplete" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource( 15 )
+volume_db = -80.0
+bus = "sfx"

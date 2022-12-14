@@ -1,0 +1,76 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://src/enemies/Enemy.tscn" type="PackedScene" id=1]
+[ext_resource path="res://assets/gfx/npcs/evil_standing2.png" type="Texture" id=2]
+[ext_resource path="res://assets/gfx/npcs/evil_attack.png" type="Texture" id=3]
+[ext_resource path="res://assets/gfx/npcs/evil_running2.png" type="Texture" id=4]
+[ext_resource path="res://assets/gfx/npcs/evil_running 1.png" type="Texture" id=5]
+[ext_resource path="res://assets/gfx/npcs/evil_scare.png" type="Texture" id=6]
+[ext_resource path="res://assets/gfx/npcs/evil_standing 1.png" type="Texture" id=7]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 3 ) ],
+"loop": true,
+"name": "attack",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 6 ) ],
+"loop": true,
+"name": "death",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 2 ), ExtResource( 7 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 6 ) ],
+"loop": true,
+"name": "hurt",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 4 ), ExtResource( 5 ) ],
+"loop": true,
+"name": "run",
+"speed": 6.0
+}, {
+"frames": [ ExtResource( 4 ), ExtResource( 5 ) ],
+"loop": true,
+"name": "walk",
+"speed": 4.0
+} ]
+
+[sub_resource type="CapsuleShape2D" id=2]
+radius = 38.0
+height = 90.0
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 16.5, 70 )
+
+[sub_resource type="RectangleShape2D" id=6]
+extents = Vector2( 293.5, 107.5 )
+
+[node name="EvilGhost" instance=ExtResource( 1 )]
+
+[node name="Sprite" parent="." index="0"]
+frames = SubResource( 1 )
+offset = Vector2( 0, -128 )
+
+[node name="CollisionShape2D" parent="." index="1"]
+position = Vector2( -4, -87 )
+shape = SubResource( 2 )
+
+[node name="CollisionShape2D" parent="Attack1HitBox" index="0"]
+position = Vector2( 46.5, -85 )
+shape = SubResource( 3 )
+
+[node name="CollisionShape2D" parent="DetectionBox" index="0"]
+position = Vector2( 130, -110 )
+shape = SubResource( 6 )
+
+[node name="FloorRaycast" parent="." index="4"]
+cast_to = Vector2( 71, 221 )
+
+[node name="FrontRaycast" parent="." index="5"]
+cast_to = Vector2( 78, 0 )

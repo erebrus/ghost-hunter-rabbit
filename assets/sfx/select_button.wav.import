@@ -1,0 +1,23 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/select_button.wav-9c1fa2cb93a4dc953d046aed4a0b758e.sample"
+
+[deps]
+
+source_file="res://assets/sfx/select_button.wav"
+dest_files=[ "res://.import/select_button.wav-9c1fa2cb93a4dc953d046aed4a0b758e.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0
