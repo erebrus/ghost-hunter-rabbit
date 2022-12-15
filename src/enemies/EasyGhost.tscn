@@ -56,7 +56,6 @@ spectral_world = true
 [node name="Sprite" parent="." index="0"]
 frames = SubResource( 4 )
 animation = "walk"
-playing = true
 offset = Vector2( 0, -128 )
 
 [node name="CollisionShape2D" parent="." index="1"]

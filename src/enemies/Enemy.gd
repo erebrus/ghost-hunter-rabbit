@@ -34,7 +34,7 @@ var dist_to_enemy:float=0
 
 func _ready() -> void:
 	Globals.get_world().connect("world_state_changed", self, "_on_world_state_changed")
-	setup_debug(true)
+#	setup_debug(true)
 
 
 func set_exists(val:bool)->void:

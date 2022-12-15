@@ -274,5 +274,12 @@ monitoring = false
 position = Vector2( -5, 26 )
 shape = SubResource( 7 )
 
+[node name="Muzzle" type="Position2D" parent="."]
+position = Vector2( 48, -91 )
+
+[node name="ReloadTimer" type="Timer" parent="."]
+wait_time = 0.5
+
 [connection signal="body_entered" from="Attack1HitBox" to="." method="_on_Attack1HitBox_body_entered"]
 [connection signal="body_entered" from="Attack2HitBox" to="." method="_on_Attack2HitBox_body_entered"]
+[connection signal="timeout" from="ReloadTimer" to="." method="_on_ReloadTimer_timeout"]

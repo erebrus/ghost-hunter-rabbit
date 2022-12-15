@@ -1,6 +1,6 @@
 extends KinematicBody2D
 
-
+const PlasmaScene = preload("res://src/player/PlasmaShot.tscn")
 
 enum {IDLE, WALK, JUMP, FALL, HURT, DEATH }
 const animations = ["default", "walk", "jump", "fall", "hurt", "death"]
@@ -41,6 +41,8 @@ var accel:float=0
 var in_animation:bool = false
 var discard_jump:=false
 var last_y:float
+var last_direction:Vector2
+var can_shoot:bool = true
 
 onready var hp:float = max_hp
 onready var g:float = 2 * h / (th * th)
@@ -177,7 +179,8 @@ func update_sprite():
 			state = FALL
 			
 	if velocity.x != 0:
-	 sprite.flip_h = velocity.x<0			
+		sprite.flip_h = velocity.x<0			
+		last_direction = Vector2(velocity.x,0).normalized()
 	
 		
 	if prev_state != state:
@@ -301,7 +304,16 @@ func do_attack(hitbox, animation):
 	update_sprite()
 
 func do_attack1():
-	do_attack(attack1_hitbox, "attack")
+	if not can_shoot:
+		return
+		
+	var bullet = PlasmaScene.instance()
+	bullet.global_position = $Muzzle.global_position
+	bullet.init(last_direction)
+	get_parent().add_child(bullet)
+	can_shoot=false
+	$ReloadTimer.start()
+	
 		
 func do_attack2():
 	do_attack(attack2_hitbox, "attack2")
@@ -317,3 +329,7 @@ func _on_Attack2HitBox_body_entered(body: Node) -> void:
 	if body != self and body.has_method("take_damage"):
 		yield(get_tree().create_timer(.1),"timeout")
 		body.take_damage(self, 20)
+
+
+func _on_ReloadTimer_timeout():
+	can_shoot = true

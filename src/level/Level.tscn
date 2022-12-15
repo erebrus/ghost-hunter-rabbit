@@ -1,15 +1,25 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://src/player/Hunter.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/enemies/EasyGhost.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/gfx/png1x/bg-cave.png" type="Texture" id=3]
 [ext_resource path="res://src/level/CaveArea.tscn" type="PackedScene" id=4]
 [ext_resource path="res://src/enemies/EvilGhost.tscn" type="PackedScene" id=5]
-[ext_resource path="res://assets/gfx/world/checkpoint.png" type="Texture" id=6]
+[ext_resource path="res://assets/gfx/player/projectiles/PNG/water/water1.png" type="Texture" id=6]
+[ext_resource path="res://assets/gfx/player/projectiles/PNG/water/water2.png" type="Texture" id=7]
+[ext_resource path="res://assets/gfx/player/projectiles/PNG/water/water3.png" type="Texture" id=8]
+[ext_resource path="res://assets/gfx/player/projectiles/PNG/water/water4.png" type="Texture" id=9]
 [ext_resource path="res://src/level/Level.gd" type="Script" id=10]
+[ext_resource path="res://assets/gfx/player/projectiles/PNG/water/water6.png" type="Texture" id=11]
+[ext_resource path="res://assets/gfx/player/projectiles/PNG/water/water9.png" type="Texture" id=12]
 [ext_resource path="res://assets/sfx/12. Lose_Game/Lose_Game_01.wav" type="AudioStream" id=13]
 [ext_resource path="res://assets/sfx/13.Open_New_Level/Open_New_level_01.wav" type="AudioStream" id=14]
 [ext_resource path="res://assets/Complete_Level_02.wav" type="AudioStream" id=15]
+[ext_resource path="res://assets/gfx/player/projectiles/PNG/water/water11.png" type="Texture" id=16]
+[ext_resource path="res://assets/gfx/player/projectiles/PNG/water/water8.png" type="Texture" id=17]
+[ext_resource path="res://assets/gfx/player/projectiles/PNG/water/water5.png" type="Texture" id=18]
+[ext_resource path="res://assets/gfx/player/projectiles/PNG/water/water7.png" type="Texture" id=19]
+[ext_resource path="res://assets/gfx/player/projectiles/PNG/water/water10.png" type="Texture" id=20]
 
 [sub_resource type="Shader" id=16]
 code = "shader_type canvas_item;
@@ -173,6 +183,14 @@ shader = SubResource( 14 )
 shader_param/ori_color = Color( 0.0313726, 0.0392157, 0.0588235, 1 )
 shader_param/OCTAVES = 7
 
+[sub_resource type="SpriteFrames" id=20]
+animations = [ {
+"frames": [ ExtResource( 6 ), ExtResource( 7 ), ExtResource( 8 ), ExtResource( 9 ), ExtResource( 18 ), ExtResource( 11 ), ExtResource( 19 ), ExtResource( 17 ), ExtResource( 12 ), ExtResource( 20 ), ExtResource( 16 ) ],
+"loop": true,
+"name": "default",
+"speed": 12.0
+} ]
+
 [node name="Level" type="Node2D"]
 script = ExtResource( 10 )
 
@@ -230,10 +248,9 @@ __meta__ = {
 position = Vector2( 1502, 132 )
 scale = Vector2( 0.5, 0.5 )
 
-[node name="Checkpoint" type="Sprite" parent="."]
-position = Vector2( 1453, 407 )
+[node name="EvilGhost2" parent="Tilemaps/Level" instance=ExtResource( 5 )]
+position = Vector2( 2096, 266 )
 scale = Vector2( 0.5, 0.5 )
-texture = ExtResource( 6 )
 
 [node name="EasyGhost" parent="." instance=ExtResource( 2 )]
 position = Vector2( 175, 182 )
@@ -288,3 +305,9 @@ bus = "sfx"
 stream = ExtResource( 15 )
 volume_db = -80.0
 bus = "sfx"
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+position = Vector2( 128, 473 )
+frames = SubResource( 20 )
+frame = 8
+playing = true
