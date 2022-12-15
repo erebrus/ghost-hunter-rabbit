@@ -17,8 +17,10 @@ func _on_anim_finished(_name: String) -> void:
 # This function is called when the state enters
 # XSM enters the root first, the the children
 func _on_enter(_args) -> void:
+	if not owner.target:
+		return
 	Logger.info("%s - entered state %s" % [owner.name, name])
-#	owner.velocity=Vector2.ZERO
+#	owner.desired_velocity=Vector2.ZERO
 	owner.do_attack()
 
 

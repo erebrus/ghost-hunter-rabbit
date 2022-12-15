@@ -1,31 +1,38 @@
 extends KinematicBody2D
 
+
 const DETECTION_RADIUS:float = 500.0 #TODO set shape radius
 signal player_detected
+signal under_new_attack
+signal start_recovery
 
-export(int) var max_hp:int = 30
+export(float) var recovery_rate = 150
+export(float) var max_hp:int = 200
 export(float) var normal_speed:float = 50
 export(float) var engage_speed:float = 200
 export(float) var charge_speed:float = 300
-
+export(float) var  max_accel:float =10.0
 export(float) var attack_damage:float = 25
 export(float) var attack_reload:float = 1
 
 export(float) var detection_radius:float = 500.0
-export(NodePath) var patrol_path
+
 
 
 var can_attack:bool = true
+var desired_velocity:=Vector2()
 var velocity:=Vector2()
 var direction:int=0
 var target
-onready var hp:int =max_hp
+var can_recover:bool = true
+
+onready var hp:float =max_hp
 
 onready var floor_rc:RayCast2D = $FloorRaycast
 onready var front_rc:RayCast2D = $FrontRaycast
 onready var sprite:AnimatedSprite = $Sprite
 onready var detection_box = $DetectionBox/CollisionShape2D
-onready var attack_box = $Attack1HitBox/CollisionShape2D
+onready var attack_box = $HurtBox/CollisionShape2D
 onready var reload_timer = $ReloadTimer
 onready var xsm = $XSM
 
@@ -69,19 +76,27 @@ func check_direction():
 		front_rc.cast_to.x=-front_rc.cast_to.x
 		floor_rc.cast_to.x=-floor_rc.cast_to.x
 		detection_box.position.x=-detection_box.position.x
-		attack_box.position.x=-attack_box.position.x
 
 func set_collide_with_platform(val:bool)-> void:
-	$CollisionShape2D.disabled = !val
+	if $CollisionShape2D:
+		$CollisionShape2D.disabled = !val
 	$FloorRaycast.enabled = val
 	$FrontRaycast.enabled = val
-	
-	
+
+
 func _process(delta: float) -> void:
-	
+
+	if can_recover and hp != max_hp:		
+		hp+=recovery_rate*delta
+		hp=clamp(hp, 0, max_hp)
+		print("recovering. hp %d" % hp)
 	check_direction()
 	
-	velocity=move_and_slide(velocity, Vector2.UP)
+	#velocity = velocity.linear_interpolate(desired_velocity, .2)
+	
+	var delta_velocity = desired_velocity-velocity
+	velocity += delta_velocity.normalized()*min(max_accel, delta_velocity.length())
+	velocity = move_and_slide(velocity, Vector2.UP)
 	dist_to_enemy=-1 if not target else global_position.distance_to(target.global_position)
 
 func _on_ReloadTimer_timeout() -> void:
@@ -101,7 +116,9 @@ func _on_DetectionBox_body_exited(body: Node) -> void:
 		
 
 func do_attack():
-	can_attack=false
+#	if not can_attack:
+#		return
+#	can_attack=false
 	
 	if target and attack_box.get_parent().overlaps_body(target):
 		target.take_damage(self, attack_damage)
@@ -115,3 +132,20 @@ func take_damage(source, damage):
 	else:
 		xsm.change_state("Death")
 
+func hit_by_beam(dmg):
+	hp -= 1
+	hp = clamp(hp, 0, max_hp)
+	if can_recover:
+		can_recover=false
+		emit_signal("under_new_attack")
+	$RecoveryTimer.start()
+	print("hit by beam. hp %d" % hp)
+	
+	if hp==0 and not xsm.is_active("Hurt"):
+		xsm.change_state("Hurt")		
+
+
+
+func _on_RecoveryTimer_timeout():
+	can_recover=true
+	emit_signal("start_recovery")

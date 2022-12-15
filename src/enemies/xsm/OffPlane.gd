@@ -28,7 +28,7 @@ func _after_enter(_args) -> void:
 # This function is called each frame if the state is ACTIVE
 # XSM updates the root first, then the children
 func _on_update(_delta: float) -> void:
-	owner.velocity=Vector2.ZERO
+	owner.desired_velocity=Vector2.ZERO
 	if owner.exists_in_current_world_state():
 		change_state("Lookout")
 

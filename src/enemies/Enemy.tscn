@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://src/enemies/xsm/Attack.gd" type="Script" id=1]
 [ext_resource path="res://src/enemies/xsm/Patrol.gd" type="Script" id=2]
@@ -12,6 +12,7 @@
 [ext_resource path="res://src/enemies/xsm/MoveToHoverPoint.gd" type="Script" id=10]
 [ext_resource path="res://src/enemies/xsm/HasTarget.gd" type="Script" id=11]
 [ext_resource path="res://src/enemies/xsm/Hover.gd" type="Script" id=12]
+[ext_resource path="res://src/enemies/xsm/Hurt.gd" type="Script" id=13]
 
 [sub_resource type="SpriteFrames" id=3]
 animations = [ {
@@ -45,6 +46,8 @@ animations = [ {
 "name": "walk",
 "speed": 4.0
 } ]
+
+[sub_resource type="CapsuleShape2D" id=8]
 
 [sub_resource type="Animation" id=4]
 resource_name = "Attack"
@@ -151,11 +154,12 @@ frames = SubResource( 3 )
 playing = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 8 )
 
-[node name="Attack1HitBox" type="Area2D" parent="."]
+[node name="HurtBox" type="Area2D" parent="."]
 monitoring = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Attack1HitBox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
 position = Vector2( -33, 52 )
 
 [node name="DetectionBox" type="Area2D" parent="."]
@@ -173,6 +177,9 @@ enabled = true
 cast_to = Vector2( 300, 0 )
 
 [node name="ReloadTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="RecoveryTimer" type="Timer" parent="."]
 one_shot = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
@@ -286,7 +293,7 @@ on_anim_finished = 0
 disabled = false
 debug_mode = false
 timed = false
-next_state = NodePath("../../../../Death")
+next_state = NodePath("")
 
 [node name="Attack" type="Node" parent="XSM/Alive/Flying/HasTarget"]
 script = ExtResource( 1 )
@@ -300,15 +307,15 @@ timed = false
 next_state = NodePath("../MoveToHoverPoint")
 
 [node name="Hurt" type="Node" parent="XSM/Alive/Flying"]
-script = ExtResource( 6 )
+script = ExtResource( 13 )
 animation_player = NodePath("../../../../AnimationPlayer")
 anim_on_enter = "Hurt"
 anim_times_to_play = 1
-on_anim_finished = 4
+on_anim_finished = 0
 disabled = false
 debug_mode = false
 timed = false
-next_state = NodePath("../../OnPlatform/Lookout")
+next_state = NodePath("")
 
 [node name="Death" type="Node" parent="XSM"]
 script = ExtResource( 6 )
@@ -324,3 +331,4 @@ next_state = NodePath("")
 [connection signal="body_entered" from="DetectionBox" to="." method="_on_DetectionBox_body_entered"]
 [connection signal="body_exited" from="DetectionBox" to="." method="_on_DetectionBox_body_exited"]
 [connection signal="timeout" from="ReloadTimer" to="." method="_on_ReloadTimer_timeout"]
+[connection signal="timeout" from="RecoveryTimer" to="." method="_on_RecoveryTimer_timeout"]

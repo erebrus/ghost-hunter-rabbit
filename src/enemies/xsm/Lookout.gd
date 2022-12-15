@@ -8,7 +8,7 @@ export(float) var look_time=1
 
 
 func _on_enter(args) -> void:
-	owner.velocity=Vector2.ZERO
+	owner.desired_velocity=Vector2.ZERO
 	add_timer(LOOKOUT_TIMER,look_time)
 	#owner.get_node("AnimationPlayer").play("default")
 #	done=false	

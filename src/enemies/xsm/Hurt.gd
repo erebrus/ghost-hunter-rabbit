@@ -1,7 +1,7 @@
 tool
 extends StateAnimation
 
-const ARRIVAL_DISTANCE=15
+
 #
 # FUNCTIONS TO INHERIT IN YOUR STATES
 #
@@ -16,7 +16,7 @@ func _on_anim_finished(_name: String) -> void:
 # This function is called when the state enters
 # XSM enters the root first, the the children
 func _on_enter(_args) -> void:
-	Logger.info("%s - entered state %s" % [owner.name, name])
+	owner.desired_velocity=Vector2.ZERO
 
 
 # This function is called just after the state enters
@@ -28,24 +28,11 @@ func _after_enter(_args) -> void:
 # This function is called each frame if the state is ACTIVE
 # XSM updates the root first, then the children
 func _on_update(_delta: float) -> void:
-	if owner.target:
-		change_state("HasTarget")
-		return
-	var target_position = owner.original_position+Vector2(0, ARRIVAL_DISTANCE)
-	var dist = target_position.distance_to(owner.global_position)
-	if dist < ARRIVAL_DISTANCE:
-		change_state("Patrol")
-		return
-		
-	var direction = owner.get_facing_direction()	
-	var facing_origin = sign(target_position.x - owner.global_position.x) == sign(direction.x)
-	
-
-	if not facing_origin:
-		direction = -owner.get_facing_direction()		
-	var real_direction_to_origin = (target_position - owner.global_position).normalized()
-	owner.desired_velocity=real_direction_to_origin * owner.normal_speed
-	
+	if owner.can_recover:
+		if owner.target:
+			change_state("MoveToHoverPoint")
+		else:
+			change_state("ReturnToPatrol")
 
 
 # This function is called each frame after all the update calls

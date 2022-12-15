@@ -23,7 +23,7 @@ func _after_enter(_args) -> void:
 	var direction = owner.get_facing_direction()	
 	if owner.is_must_turn():
 		direction = -owner.get_facing_direction()	
-	owner.velocity=Vector2(owner.normal_speed,0)*direction
+	owner.desired_velocity=Vector2(owner.normal_speed,0)*direction
 
 
 # This function is called each frame if the state is ACTIVE

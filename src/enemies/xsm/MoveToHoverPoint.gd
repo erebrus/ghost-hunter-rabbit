@@ -33,7 +33,8 @@ func _after_enter(_args) -> void:
 # XSM updates the root first, then the children
 func _on_update(_delta: float) -> void:
 	
-	
+	if not owner.target:
+		return
 	var dist = hover_point.distance_to(owner.global_position)
 	if dist < ARRIVAL_DISTANCE:
 		change_state("Hover")
@@ -46,7 +47,7 @@ func _on_update(_delta: float) -> void:
 	if not facing_origin:
 		direction = -owner.get_facing_direction()		
 	var real_direction_to_origin = (hover_point - owner.global_position).normalized()
-	owner.velocity=real_direction_to_origin * owner.engage_speed
+	owner.desired_velocity=real_direction_to_origin * owner.engage_speed
 
 
 # This function is called each frame after all the update calls
@@ -77,6 +78,8 @@ func _on_timeout(_name) -> void:
 	pass
 
 func determine_hover_point() -> void:
+	if not owner.target:
+		return
 	var dist = RNGTools.randi_range(MIN_HOVER_DIST, MAX_HOVER_DIST)
 	var x = RNGTools.randi_range(50, owner.DETECTION_RADIUS*.85)
 	if owner.target.global_position.x > owner.global_position.x:

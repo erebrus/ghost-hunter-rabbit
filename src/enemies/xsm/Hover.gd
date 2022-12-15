@@ -24,7 +24,7 @@ func _on_enter(_args) -> void:
 	Logger.info("%s - entered state %s" % [owner.name, name])	
 	var t = min_hover_time + (max_hover_time-min_hover_time)*randf()
 	add_timer("HoverTimer", t)
-	owner.velocity = Vector2.ZERO
+	owner.desired_velocity = Vector2.ZERO
 	hover_point = owner.global_position	
 	set_new_target_position()
 
@@ -44,14 +44,8 @@ func _on_update(_delta: float) -> void:
 		set_new_target_position()
 		return
 		
-	var direction = owner.get_facing_direction()	
-	var facing_origin = sign(owner.target.global_position.x - owner.global_position.x) == sign(direction.x)
-	
-
-	if not facing_origin:
-		direction = -owner.get_facing_direction()		
 	var real_direction_to_origin = (target_position - owner.global_position).normalized()
-	owner.velocity=real_direction_to_origin * owner.normal_speed
+	owner.desired_velocity=real_direction_to_origin * owner.normal_speed
 
 
 # This function is called each frame after all the update calls
