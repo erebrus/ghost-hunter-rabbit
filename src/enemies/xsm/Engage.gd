@@ -17,7 +17,7 @@ func _on_anim_finished(_name: String) -> void:
 # This function is called when the state enters
 # XSM enters the root first, the the children
 func _on_enter(_args) -> void:
-	pass
+	Logger.info("%s - entered state %s" % [owner.name, name])
 
 # This function is called just after the state enters
 # XSM after_enters the children first, then the parent
@@ -28,9 +28,6 @@ func _after_enter(_args) -> void:
 # This function is called each frame if the state is ACTIVE
 # XSM updates the root first, then the children
 func _on_update(_delta: float) -> void:
-	if not owner.target:
-		change_state("Lookout")
-		return
 
 	var direction = owner.get_facing_direction()	
 	var dist = owner.target.global_position.distance_to(owner.global_position)
@@ -46,7 +43,8 @@ func _on_update(_delta: float) -> void:
 		if owner.sprite.animation!="idle":
 			play("Idle")
 	else:
-		owner.velocity=Vector2(owner.engage_speed,0)*direction
+		var real_direction_to_target = (owner.target.global_position - owner.global_position).normalized()
+		owner.velocity=real_direction_to_target * owner.charge_speed
 		if owner.sprite.animation!="run":
 			play("Run")
 

@@ -251,6 +251,14 @@ shift_state={
  ]
 }
 
+[layer_names]
+
+2d_physics/layer_1="world_pase"
+2d_physics/layer_2="player"
+2d_physics/layer_3="enemies"
+2d_physics/layer_4="projectiles"
+2d_physics/layer_5="platforms"
+
 [physics]
 
 common/enable_pause_aware_picking=true

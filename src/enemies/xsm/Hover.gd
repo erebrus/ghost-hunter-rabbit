@@ -1,7 +1,14 @@
 tool
 extends StateAnimation
 
+export(float) var min_hover_time:float = 1.5
+export(float) var max_hover_time:float = 3.0
+export(float) var hover_radius:float = 40.0
 
+var hover_point:Vector2
+var target_position:Vector2
+#
+# FUNCTIONS TO INHERIT IN YOUR STATES
 #
 
 # This additionnal callback allows you to act at the end
@@ -14,25 +21,37 @@ func _on_anim_finished(_name: String) -> void:
 # This function is called when the state enters
 # XSM enters the root first, the the children
 func _on_enter(_args) -> void:
-	pass
+	Logger.info("%s - entered state %s" % [owner.name, name])	
+	var t = min_hover_time + (max_hover_time-min_hover_time)*randf()
+	add_timer("HoverTimer", t)
+	owner.velocity = Vector2.ZERO
+	hover_point = owner.global_position	
+	set_new_target_position()
+
 
 
 # This function is called just after the state enters
 # XSM after_enters the children first, then the parent
 func _after_enter(_args) -> void:
-	var direction = owner.get_facing_direction()	
-	if owner.is_must_turn():
-		direction = -owner.get_facing_direction()	
-	owner.velocity=Vector2(owner.normal_speed,0)*direction
+	pass
 
 
 # This function is called each frame if the state is ACTIVE
 # XSM updates the root first, then the children
 func _on_update(_delta: float) -> void:
-	if owner.target:
-		change_state("HasTarget")
-	elif owner.is_must_turn():
-		change_state("Lookout")
+	var dist = target_position.distance_to(owner.global_position)
+	if dist < 10:
+		set_new_target_position()
+		return
+		
+	var direction = owner.get_facing_direction()	
+	var facing_origin = sign(owner.target.global_position.x - owner.global_position.x) == sign(direction.x)
+	
+
+	if not facing_origin:
+		direction = -owner.get_facing_direction()		
+	var real_direction_to_origin = (target_position - owner.global_position).normalized()
+	owner.velocity=real_direction_to_origin * owner.normal_speed
 
 
 # This function is called each frame after all the update calls
@@ -60,4 +79,9 @@ func _state_timeout() -> void:
 
 # Called when any other Timer times out
 func _on_timeout(_name) -> void:
-	pass
+	if _name == "HoverTimer":
+		change_state("Engage")
+
+func set_new_target_position()->void:
+	var angle=randf()*2*PI
+	target_position = hover_point + Vector2.RIGHT.rotated(angle)*hover_radius

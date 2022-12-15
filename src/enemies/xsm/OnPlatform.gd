@@ -1,38 +1,30 @@
 tool
-extends StateAnimation
+extends State
 
 
 #
-
-# This additionnal callback allows you to act at the end
-# of an animation (after the nb of times it should play)
-# If looping, is called after each loop
-func _on_anim_finished(_name: String) -> void:
-	pass
-
+# FUNCTIONS TO INHERIT IN YOUR STATES
+#
 
 # This function is called when the state enters
 # XSM enters the root first, the the children
 func _on_enter(_args) -> void:
-	pass
+	owner.set_collide_with_platform(true)
 
 
 # This function is called just after the state enters
 # XSM after_enters the children first, then the parent
 func _after_enter(_args) -> void:
-	var direction = owner.get_facing_direction()	
-	if owner.is_must_turn():
-		direction = -owner.get_facing_direction()	
-	owner.velocity=Vector2(owner.normal_speed,0)*direction
+	pass
 
 
 # This function is called each frame if the state is ACTIVE
 # XSM updates the root first, then the children
 func _on_update(_delta: float) -> void:
-	if owner.target:
-		change_state("HasTarget")
-	elif owner.is_must_turn():
-		change_state("Lookout")
+	if owner.is_on_floor():
+		owner.velocity.y=0
+	else:
+		owner.velocity.y += 1000 * _delta
 
 
 # This function is called each frame after all the update calls
@@ -50,7 +42,7 @@ func _before_exit(_args) -> void:
 # This function is called when the State exits
 # XSM before_exits the children first, then the root
 func _on_exit(_args) -> void:
-	pass
+	owner.set_collide_with_platform(false)
 
 
 # when StateAutomaticTimer timeout()

@@ -11,13 +11,14 @@ extends StateAnimation
 # If looping, is called after each loop
 func _on_anim_finished(_name: String) -> void:
 	if _name == "Attack":
-		change_state("Engage")
+		change_state("MoveToHoverPoint")
 
 
 # This function is called when the state enters
 # XSM enters the root first, the the children
 func _on_enter(_args) -> void:
-	owner.velocity=Vector2.ZERO
+	Logger.info("%s - entered state %s" % [owner.name, name])
+#	owner.velocity=Vector2.ZERO
 	owner.do_attack()
 
 

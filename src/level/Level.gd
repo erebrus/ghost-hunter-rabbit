@@ -1,6 +1,5 @@
 extends Node2D
 
-signal world_state_changed
 
 const GameOverScene:PackedScene = preload("res://src/ui/GameOverOverlay.tscn")
 #const GameWinScene:PackedScene = preload("res://src/ui/GameWinOverlay.tscn")
@@ -26,7 +25,7 @@ func do_end():
 	lost=true
 	paused = true
 	Globals.get_player().velocity=Vector2.ZERO
-	print("Game Over. Carrots.")	
+	print("Game Over. ")	
 
 		
 func _unhandled_input(event: InputEvent) -> void:
@@ -35,19 +34,6 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_tree().quit()
 	if Input.is_action_just_pressed("restart"):
 		restart()
-	if Input.is_action_just_pressed("shift_state"):
-		shift_state()
-		
-func shift_state()->void:
-	if state == Globals.WorldState.MATERIAL:
-		state = Globals.WorldState.SPECTRAL
-		$Foreground/Tint.visible=true
-		$Foreground/Fog.visible=true
-	else:
-		state = Globals.WorldState.MATERIAL
-		$Foreground/Tint.visible=false
-		$Foreground/Fog.visible=false
-	emit_signal("world_state_changed")
 	
 func restart():
 	get_tree().change_scene("res://src/level/Level.tscn")

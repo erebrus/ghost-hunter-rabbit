@@ -17,7 +17,7 @@ func _on_enter(args) -> void:
 	
 func _on_update(_delta: float) -> void:
 	if owner.target:
-		change_state("Engage")
+		change_state("HasTarget")
 		
 func _on_timeout(_name) -> void:
 	if _name == LOOKOUT_TIMER:		

@@ -3,6 +3,8 @@ extends StateAnimation
 
 
 #
+# FUNCTIONS TO INHERIT IN YOUR STATES
+#
 
 # This additionnal callback allows you to act at the end
 # of an animation (after the nb of times it should play)
@@ -14,25 +16,20 @@ func _on_anim_finished(_name: String) -> void:
 # This function is called when the state enters
 # XSM enters the root first, the the children
 func _on_enter(_args) -> void:
-	pass
+	Logger.info("%s - entered state %s" % [owner.name, name])
 
 
 # This function is called just after the state enters
 # XSM after_enters the children first, then the parent
 func _after_enter(_args) -> void:
-	var direction = owner.get_facing_direction()	
-	if owner.is_must_turn():
-		direction = -owner.get_facing_direction()	
-	owner.velocity=Vector2(owner.normal_speed,0)*direction
+	pass
 
 
 # This function is called each frame if the state is ACTIVE
 # XSM updates the root first, then the children
 func _on_update(_delta: float) -> void:
-	if owner.target:
-		change_state("HasTarget")
-	elif owner.is_must_turn():
-		change_state("Lookout")
+	if not owner.target:
+		change_state("ReturnToPatrol")
 
 
 # This function is called each frame after all the update calls

@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://src/enemies/xsm/Attack.gd" type="Script" id=1]
 [ext_resource path="res://src/enemies/xsm/Patrol.gd" type="Script" id=2]
@@ -7,7 +7,11 @@
 [ext_resource path="res://src/enemies/xsm/Engage.gd" type="Script" id=5]
 [ext_resource path="res://addons/xsm/state_animation.gd" type="Script" id=6]
 [ext_resource path="res://src/enemies/Enemy.gd" type="Script" id=7]
-[ext_resource path="res://src/enemies/xsm/OffPlane.gd" type="Script" id=8]
+[ext_resource path="res://src/enemies/xsm/OnPlatform.gd" type="Script" id=8]
+[ext_resource path="res://src/enemies/xsm/ReturnToPatrol.gd" type="Script" id=9]
+[ext_resource path="res://src/enemies/xsm/MoveToHoverPoint.gd" type="Script" id=10]
+[ext_resource path="res://src/enemies/xsm/HasTarget.gd" type="Script" id=11]
+[ext_resource path="res://src/enemies/xsm/Hover.gd" type="Script" id=12]
 
 [sub_resource type="SpriteFrames" id=3]
 animations = [ {
@@ -186,7 +190,7 @@ fsm_owner = NodePath("..")
 disabled = false
 debug_mode = false
 timed = false
-next_state = NodePath("Alive/Lookout")
+next_state = NodePath("Alive/OnPlatform/Lookout")
 
 [node name="Alive" type="Node" parent="XSM"]
 script = ExtResource( 4 )
@@ -195,67 +199,65 @@ debug_mode = false
 timed = false
 next_state = NodePath("")
 
-[node name="Lookout" type="Node" parent="XSM/Alive"]
+[node name="OnPlatform" type="Node" parent="XSM/Alive"]
+script = ExtResource( 8 )
+disabled = false
+debug_mode = false
+timed = false
+next_state = NodePath("")
+
+[node name="Lookout" type="Node" parent="XSM/Alive/OnPlatform"]
 script = ExtResource( 3 )
 look_time = 1
-animation_player = NodePath("../../../AnimationPlayer")
+animation_player = NodePath("../../../../AnimationPlayer")
 anim_on_enter = "Idle"
 anim_times_to_play = 1
 on_anim_finished = 0
 disabled = false
 debug_mode = false
 timed = false
-next_state = NodePath("../../Death")
+next_state = NodePath("../../../Death")
 
-[node name="Patrol" type="Node" parent="XSM/Alive"]
+[node name="Patrol" type="Node" parent="XSM/Alive/OnPlatform"]
 script = ExtResource( 2 )
-animation_player = NodePath("../../../AnimationPlayer")
+animation_player = NodePath("../../../../AnimationPlayer")
 anim_on_enter = "Walk"
 anim_times_to_play = 1
 on_anim_finished = 0
 disabled = false
 debug_mode = false
 timed = false
-next_state = NodePath("../../Death")
+next_state = NodePath("../../../Death")
 
-[node name="Engage" type="Node" parent="XSM/Alive"]
-script = ExtResource( 5 )
-stop_range = 40.0
-animation_player = NodePath("../../../AnimationPlayer")
-anim_on_enter = "Run"
-anim_times_to_play = 1
-on_anim_finished = 0
+[node name="Flying" type="Node" parent="XSM/Alive"]
+script = ExtResource( 4 )
 disabled = false
 debug_mode = false
 timed = false
-next_state = NodePath("../../Death")
+next_state = NodePath("")
 
-[node name="Attack" type="Node" parent="XSM/Alive"]
-script = ExtResource( 1 )
-animation_player = NodePath("../../../AnimationPlayer")
-anim_on_enter = "Attack"
-anim_times_to_play = 1
-on_anim_finished = 0
+[node name="ReturnToPatrol" type="Node" parent="XSM/Alive/Flying"]
+script = ExtResource( 9 )
+animation_player = NodePath("../../../../AnimationPlayer")
+anim_on_enter = ""
 disabled = false
 debug_mode = false
 timed = false
-next_state = NodePath("../../Death")
+next_state = NodePath("")
 
-[node name="Hurt" type="Node" parent="XSM/Alive"]
-script = ExtResource( 6 )
-animation_player = NodePath("../../../AnimationPlayer")
-anim_on_enter = "Hurt"
-anim_times_to_play = 1
-on_anim_finished = 4
+[node name="HasTarget" type="Node" parent="XSM/Alive/Flying"]
+script = ExtResource( 11 )
+animation_player = NodePath("../../../../AnimationPlayer")
+anim_on_enter = ""
 disabled = false
 debug_mode = false
 timed = false
-next_state = NodePath("../Lookout")
+next_state = NodePath("MoveToHoverPoint")
 
-[node name="Death" type="Node" parent="XSM"]
-script = ExtResource( 6 )
-animation_player = NodePath("../../AnimationPlayer")
-anim_on_enter = "Death"
+[node name="MoveToHoverPoint" type="Node" parent="XSM/Alive/Flying/HasTarget"]
+script = ExtResource( 10 )
+animation_player = NodePath("../../../../../AnimationPlayer")
+anim_on_enter = "Walk"
 anim_times_to_play = 1
 on_anim_finished = 0
 disabled = false
@@ -263,10 +265,57 @@ debug_mode = false
 timed = false
 next_state = NodePath("")
 
-[node name="OffPlane" type="Node" parent="XSM"]
-script = ExtResource( 8 )
+[node name="Hover" type="Node" parent="XSM/Alive/Flying/HasTarget"]
+script = ExtResource( 12 )
+animation_player = NodePath("../../../../../AnimationPlayer")
+anim_on_enter = "Idle"
+anim_times_to_play = 1
+on_anim_finished = 0
+disabled = false
+debug_mode = false
+timed = false
+next_state = NodePath("")
+
+[node name="Engage" type="Node" parent="XSM/Alive/Flying/HasTarget"]
+script = ExtResource( 5 )
+stop_range = 40.0
+animation_player = NodePath("../../../../../AnimationPlayer")
+anim_on_enter = "Run"
+anim_times_to_play = 1
+on_anim_finished = 0
+disabled = false
+debug_mode = false
+timed = false
+next_state = NodePath("../../../../Death")
+
+[node name="Attack" type="Node" parent="XSM/Alive/Flying/HasTarget"]
+script = ExtResource( 1 )
+animation_player = NodePath("../../../../../AnimationPlayer")
+anim_on_enter = "Attack"
+anim_times_to_play = 1
+on_anim_finished = 0
+disabled = false
+debug_mode = false
+timed = false
+next_state = NodePath("../MoveToHoverPoint")
+
+[node name="Hurt" type="Node" parent="XSM/Alive/Flying"]
+script = ExtResource( 6 )
+animation_player = NodePath("../../../../AnimationPlayer")
+anim_on_enter = "Hurt"
+anim_times_to_play = 1
+on_anim_finished = 4
+disabled = false
+debug_mode = false
+timed = false
+next_state = NodePath("../../OnPlatform/Lookout")
+
+[node name="Death" type="Node" parent="XSM"]
+script = ExtResource( 6 )
 animation_player = NodePath("../../AnimationPlayer")
-anim_on_enter = ""
+anim_on_enter = "Death"
+anim_times_to_play = 1
+on_anim_finished = 0
 disabled = false
 debug_mode = false
 timed = false
