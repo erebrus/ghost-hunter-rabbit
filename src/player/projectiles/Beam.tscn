@@ -1,0 +1,118 @@
+[gd_scene load_steps=17 format=2]
+
+[ext_resource path="res://src/player/Beam.gd" type="Script" id=1]
+[ext_resource path="res://addons/kenney_particle_pack/spark_02.png" type="Texture" id=2]
+[ext_resource path="res://addons/kenney_particle_pack/star_05.png" type="Texture" id=3]
+[ext_resource path="res://addons/kenney_particle_pack/rotated/spark_06_rotated.png" type="Texture" id=4]
+[ext_resource path="res://assets/sfx/518871__crisheld__laserbeam.wav" type="AudioStream" id=5]
+[ext_resource path="res://assets/sfx/402536__pureaudioninja__pan-elfy-sfx-fuzz-swirl-11.wav" type="AudioStream" id=6]
+[ext_resource path="res://assets/resources/BeamMat.tres" type="Material" id=7]
+
+[sub_resource type="Gradient" id=5]
+offsets = PoolRealArray( 0.00967742, 0.483871, 0.693548, 0.974194, 1 )
+colors = PoolColorArray( 0.796078, 0.941176, 0.717647, 1, 0.796078, 0.941176, 0.717647, 1, 0.796078, 0.941176, 0.717647, 1, 0.635484, 0.635484, 0.635484, 0.364516, 1, 1, 1, 0 )
+
+[sub_resource type="GradientTexture" id=6]
+gradient = SubResource( 5 )
+
+[sub_resource type="Curve" id=2]
+max_value = 0.5
+_data = [ Vector2( 0, 0.5 ), 0.0, 0.0, 0, 0, Vector2( 0.631285, 0.493271 ), 0.0, 0.0, 0, 0, Vector2( 0.997207, 0 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=3]
+curve = SubResource( 2 )
+
+[sub_resource type="ParticlesMaterial" id=4]
+flag_disable_z = true
+spread = 60.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 30.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale = 0.1
+scale_curve = SubResource( 3 )
+color_ramp = SubResource( 6 )
+
+[sub_resource type="ParticlesMaterial" id=7]
+flag_disable_z = true
+spread = 60.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 50.0
+angular_velocity = 5.0
+angular_velocity_random = 0.75
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+damping = 5.0
+scale = 0.1
+scale_curve = SubResource( 3 )
+color_ramp = SubResource( 6 )
+
+[sub_resource type="Curve" id=9]
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.558659, 0.965709 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=10]
+curve = SubResource( 9 )
+
+[sub_resource type="ParticlesMaterial" id=8]
+emission_shape = 2
+emission_box_extents = Vector3( 1, 1, 1 )
+flag_align_y = true
+flag_disable_z = true
+direction = Vector3( -1, 0, 0 )
+spread = 0.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 30.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+tangential_accel = 100.0
+tangential_accel_random = 1.0
+scale = 0.05
+scale_curve = SubResource( 10 )
+color = Color( 0.796078, 0.941176, 0.717647, 1 )
+
+[node name="Beam" type="RayCast2D"]
+cast_to = Vector2( 250, 0 )
+collision_mask = 5
+collide_with_areas = true
+script = ExtResource( 1 )
+max_length = 400.0
+cast_speed = 900.0
+dps = 100.0
+
+[node name="Line" type="Line2D" parent="."]
+material = ExtResource( 7 )
+points = PoolVector2Array( 0, 0, 250, 0 )
+width = 12.0
+default_color = Color( 0.796078, 0.941176, 0.717647, 1 )
+texture = ExtResource( 4 )
+texture_mode = 2
+joint_mode = 2
+antialiased = true
+
+[node name="CastingParticles" type="Particles2D" parent="."]
+emitting = false
+lifetime = 0.5
+process_material = SubResource( 4 )
+texture = ExtResource( 3 )
+
+[node name="CollisionParticles" type="Particles2D" parent="."]
+emitting = false
+amount = 20
+lifetime = 0.6
+explosiveness = 0.36
+process_material = SubResource( 7 )
+texture = ExtResource( 2 )
+
+[node name="BeamParticles" type="Particles2D" parent="."]
+emitting = false
+amount = 80
+local_coords = false
+process_material = SubResource( 8 )
+texture = ExtResource( 3 )
+
+[node name="Buzz" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 5 )
+
+[node name="Hitting" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 6 )
+volume_db = -2.301

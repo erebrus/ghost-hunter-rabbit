@@ -1,6 +1,6 @@
 extends KinematicBody2D
 
-const PlasmaScene = preload("res://src/player/PlasmaShot.tscn")
+#const PlasmaScene = preload("res://src/player/PlasmaShot.tscn")
 
 enum {IDLE, WALK, JUMP, FALL, HURT, DEATH }
 const animations = ["default", "walk", "jump", "fall", "hurt", "death"]
@@ -55,8 +55,7 @@ onready var sprite = $Sprite
 onready var collision_shape = $CollisionShape2D
 onready var sfx_jump = $Jump
 onready var sfx_carrot = $Carrot
-onready var attack1_hitbox = $Attack1HitBox
-onready var attack2_hitbox = $Attack2HitBox
+onready var beam = $Muzzle/Beam
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -255,8 +254,10 @@ func control(_delta:float) -> void:
 
 	if Input.is_action_just_pressed("attack"):
 		do_attack1()
-	elif Input.is_action_just_pressed("attack2"):
-		do_attack2()
+	if Input.is_action_pressed("attack2"):
+		fire_beam()
+	else:
+		stop_beam()
 
 	
 func is_in_coyote_time()	:
@@ -294,41 +295,31 @@ func take_damage(source, damage):
 	else:
 		in_animation=false
 
-func do_attack(hitbox, animation):
-	in_animation = true
-	sprite.play(animation)	
-	hitbox.monitoring=true
-	yield(sprite,"animation_finished")
-	hitbox.monitoring=false
-	in_animation = false
-	update_sprite()
 
 func do_attack1():
 	if not can_shoot:
 		return
 		
-	var bullet = PlasmaScene.instance()
-	bullet.global_position = $Muzzle.global_position
-	bullet.init(last_direction)
-	get_parent().add_child(bullet)
-	can_shoot=false
-	$ReloadTimer.start()
+#	var bullet = PlasmaScene.instance()
+#	bullet.global_position = $Muzzle.global_position
+#	bullet.init(last_direction)
+#	get_parent().add_child(bullet)
+#	can_shoot=false
+#	$ReloadTimer.start()
 	
 		
-func do_attack2():
-	do_attack(attack2_hitbox, "attack2")
-
-
-func _on_Attack1HitBox_body_entered(body: Node) -> void:
-	if body != self and body.has_method("take_damage"):
-		yield(get_tree().create_timer(.1),"timeout")
-		body.take_damage(self, 40)
-
-
-func _on_Attack2HitBox_body_entered(body: Node) -> void:
-	if body != self and body.has_method("take_damage"):
-		yield(get_tree().create_timer(.1),"timeout")
-		body.take_damage(self, 20)
+func fire_beam():
+	if not beam.is_casting:
+		beam.set_is_casting(true)
+	var target_pos = get_global_mouse_position()
+	beam.rotation = (target_pos - global_position).angle()
+		#gun rotation
+#		firing = true
+		
+func stop_beam():
+	if beam.is_casting:
+		beam.set_is_casting(false)
+#	firing = false
 
 
 func _on_ReloadTimer_timeout():
