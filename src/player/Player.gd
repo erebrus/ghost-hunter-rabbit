@@ -1,6 +1,6 @@
 extends KinematicBody2D
 
-#const PlasmaScene = preload("res://src/player/PlasmaShot.tscn")
+const PlasmaScene = preload("res://src/player/PlasmaShot.tscn")
 
 enum {IDLE, WALK, JUMP, FALL, HURT, DEATH }
 const animations = ["default", "walk", "jump", "fall", "hurt", "death"]
@@ -300,12 +300,12 @@ func do_attack1():
 	if not can_shoot:
 		return
 		
-#	var bullet = PlasmaScene.instance()
-#	bullet.global_position = $Muzzle.global_position
-#	bullet.init(last_direction)
-#	get_parent().add_child(bullet)
-#	can_shoot=false
-#	$ReloadTimer.start()
+	var bullet = PlasmaScene.instance()
+	bullet.global_position = $Muzzle.global_position
+	bullet.init(last_direction)
+	get_parent().add_child(bullet)
+	can_shoot=false
+	$ReloadTimer.start()
 	
 		
 func fire_beam():
