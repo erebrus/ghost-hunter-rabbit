@@ -36,7 +36,7 @@ func _on_update(_delta: float) -> void:
 	var dist = owner.target.global_position.distance_to(owner.global_position)
 	var facing_enemy = sign(owner.target.global_position.x - owner.global_position.x) == sign(direction.x)
 		
-	if dist < attack_range and facing_enemy and owner.can_attack:
+	if owner.on_target():# and owner.can_attack:
 		change_state("Attack")
 		return			
 	if not facing_enemy:

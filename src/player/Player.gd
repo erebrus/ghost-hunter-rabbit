@@ -260,8 +260,8 @@ func control(_delta:float) -> void:
 			 velocity.y =velocity.y + damping_speed #clamp(velocity.y + damping_speed, velocity.y, 0)
 						
 
-	if Input.is_action_just_pressed("attack"):
-		do_attack1()
+#	if Input.is_action_just_pressed("attack"):
+#		do_attack1()
 	if Input.is_action_pressed("attack2"):
 		fire_beam()
 	else:
@@ -304,16 +304,16 @@ func take_damage(source, damage):
 		in_animation=false
 
 
-func do_attack1():
-	if not can_shoot:
-		return
-		
-	var bullet = PlasmaScene.instance()
-	bullet.global_position = $Muzzle.global_position
-	bullet.init(last_direction)
-	get_parent().add_child(bullet)
-	can_shoot=false
-	$ReloadTimer.start()
+#func do_attack1():
+#	if not can_shoot:
+#		return
+#
+#	var bullet = PlasmaScene.instance()
+#	bullet.global_position = $Muzzle.global_position
+#	bullet.init(last_direction)
+#	get_parent().add_child(bullet)
+#	can_shoot=false
+#	$ReloadTimer.start()
 	
 func fire_beam():
 	var gun = $Gun/Sprite
@@ -321,18 +321,13 @@ func fire_beam():
 		beam.set_is_casting(true)
 	var target_pos = get_global_mouse_position()
 	var angle = (target_pos - gun.global_position).angle()
-	print("angle:%f (%f) 3*PI/4:%f" % [angle, rad2deg(angle), 3*PI/4])
 	if not sprite.flip_h:
-		angle = clamp(angle, -PI/4, PI/4)
+		angle = clamp(angle, -PI/3, PI/4)
 	else:
-		#angle = clamp(angle, PI/4+PI/2, PI/4+PI)
-
-		if angle > -3*PI/4 and angle < 0:
-			angle = -3*PI/4
+		if angle > -2*PI/3 and angle < 0:
+			angle = -2*PI/3
 		elif angle < 3*PI/4 and angle >0:
 			angle = 3*PI/4
-		
-		
 	
 	gun.rotation = angle
 	if not sprite.flip_h:

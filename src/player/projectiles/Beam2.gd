@@ -64,7 +64,7 @@ func cast_beam(dmg:float ) -> void:
 		end.position=cast_point-Vector2(10,0)
 		end.visible=true
 		var target = get_collider()
-		if target.get_parent().has_method("hit_by_beam"):
+		if target.get_parent().has_method("hit_by_beam") and is_casting:
 			target.get_parent().hit_by_beam(dmg)
 	else:
 		end.visible=false
@@ -74,11 +74,11 @@ func cast_beam(dmg:float ) -> void:
 	beam_particles.process_material.emission_box_extents.x = cast_point.length() * .5
 
 func appear() -> void:
-	pass
+	$Line.visible=true
 
 	
 func disappear() -> void:
-	pass
+	$Line.visible=false
 	#tween.tween_property(line,"width", 0, growth_time)
 	
 	

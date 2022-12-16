@@ -52,12 +52,12 @@ height = 66.0
 radius = 550.0
 
 [node name="EasyGhost" instance=ExtResource( 1 )]
+charge_speed = 275.0
 detection_radius = 750.0
 
 [node name="Sprite" parent="." index="0"]
 frames = SubResource( 4 )
 animation = "walk"
-frame = 1
 offset = Vector2( 0, -128 )
 
 [node name="CollisionShape2D" parent="." index="1"]
@@ -67,6 +67,7 @@ shape = SubResource( 7 )
 [node name="HurtBox" parent="." index="2"]
 collision_layer = 4
 collision_mask = 3
+monitoring = true
 
 [node name="CollisionShape2D" parent="HurtBox" index="0"]
 position = Vector2( 9, -105 )
@@ -119,4 +120,3 @@ next_state = NodePath("../../../../Death")
 
 [node name="Engage" parent="XSM/Alive/Flying/HasTarget" index="2"]
 max_change_duration = 2.0
-anim_on_enter = ""

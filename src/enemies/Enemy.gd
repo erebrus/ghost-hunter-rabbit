@@ -145,6 +145,9 @@ func hit_by_beam(dmg):
 		xsm.change_state("Hurt")		
 
 
+func on_target():
+	return  target and attack_box.get_parent().overlaps_body(target)
+
 
 func _on_RecoveryTimer_timeout():
 	can_recover=true
