@@ -1,49 +1,15 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://src/player/Hunter.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/enemies/EasyGhost.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/gfx/png1x/bg-cave.png" type="Texture" id=3]
 [ext_resource path="res://src/level/CaveArea.tscn" type="PackedScene" id=4]
 [ext_resource path="res://src/enemies/EvilGhost.tscn" type="PackedScene" id=5]
+[ext_resource path="res://assets/gfx/lights/white.png" type="Texture" id=6]
 [ext_resource path="res://src/level/Level.gd" type="Script" id=10]
 [ext_resource path="res://assets/sfx/12. Lose_Game/Lose_Game_01.wav" type="AudioStream" id=13]
 [ext_resource path="res://assets/sfx/13.Open_New_Level/Open_New_level_01.wav" type="AudioStream" id=14]
 [ext_resource path="res://assets/Complete_Level_02.wav" type="AudioStream" id=15]
-
-[sub_resource type="Shader" id=16]
-code = "shader_type canvas_item;
-
-uniform float SAMPLES = 11.0;
-const float WIDTH = 0.04734573810584494679397346954847;
-
-uniform vec2 blur_scale = vec2(1, 0);
-
-float gaussian(float x) {
-    float x_squared = x*x;
-
-    return WIDTH * exp((x_squared / (2.0 * SAMPLES)) * -1.0);
-}
-
-void fragment() {
-	vec2 scale = TEXTURE_PIXEL_SIZE * blur_scale;
-	
-	float weight = 0.0;
-	float total_weight = 0.0;
-	vec4 color = vec4(0.0);
-	
-	for(int i=-int(SAMPLES)/2; i < int(SAMPLES)/2; ++i) {
-		weight = gaussian(float(i));
-		color.rgb += texture(SCREEN_TEXTURE, SCREEN_UV + scale * vec2(float(i))).rgb * weight;
-		total_weight += weight;
-	}
-	
-	COLOR.rgb = color.rgb / total_weight;
-}"
-
-[sub_resource type="ShaderMaterial" id=17]
-shader = SubResource( 16 )
-shader_param/SAMPLES = 11.0
-shader_param/blur_scale = Vector2( 0.001, 0 )
 
 [sub_resource type="Shader" id=12]
 code = "shader_type canvas_item;
@@ -198,11 +164,6 @@ __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="ColorRect" type="ColorRect" parent="ParallaxBackground/Medium"]
-material = SubResource( 17 )
-margin_right = 1017.0
-margin_bottom = 635.0
-
 [node name="Close" type="ParallaxLayer" parent="ParallaxBackground"]
 motion_scale = Vector2( 0.8, 1 )
 motion_mirroring = Vector2( 1024, 0 )
@@ -228,7 +189,7 @@ __meta__ = {
 [node name="EvilGhost" parent="Tilemaps/Level" instance=ExtResource( 5 )]
 light_mask = 1
 material = null
-position = Vector2( 2810, 196 )
+position = Vector2( 885, 308 )
 scale = Vector2( 0.5, 0.5 )
 
 [node name="EvilGhost2" parent="Tilemaps/Level" instance=ExtResource( 5 )]
@@ -240,13 +201,13 @@ scale = Vector2( 0.5, 0.5 )
 [node name="EasyGhost" parent="." instance=ExtResource( 2 )]
 light_mask = 1
 material = null
-position = Vector2( 175, 182 )
+position = Vector2( 191, 1164 )
 scale = Vector2( 0.4, 0.4 )
 
 [node name="EasyGhost2" parent="." instance=ExtResource( 2 )]
 light_mask = 1
 material = null
-position = Vector2( 938, 393 )
+position = Vector2( 954, 1375 )
 scale = Vector2( 0.4, 0.4 )
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
@@ -272,15 +233,23 @@ visible = false
 material = SubResource( 18 )
 margin_right = 1023.0
 margin_bottom = 637.0
+color = Color( 0.117647, 0.105882, 0.105882, 1 )
 
-[node name="Fog" type="ColorRect" parent="Foreground"]
-visible = false
+[node name="Darkness" type="Light2D" parent="Foreground"]
+light_mask = 7
+position = Vector2( 2209, 276.5 )
+scale = Vector2( 45.18, 6.53 )
+texture = ExtResource( 6 )
+mode = 1
+range_layer_min = -101
+range_item_cull_mask = 7
+
+[node name="HUDLayer" type="CanvasLayer" parent="."]
+
+[node name="Fog" type="ColorRect" parent="HUDLayer"]
 material = SubResource( 19 )
 margin_right = 1023.0
 margin_bottom = 637.0
-
-[node name="HUDLayer" type="CanvasLayer" parent="."]
-visible = false
 
 [node name="Sounds" type="Node2D" parent="."]
 

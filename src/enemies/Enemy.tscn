@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://src/enemies/xsm/Attack.gd" type="Script" id=1]
 [ext_resource path="res://src/enemies/xsm/Patrol.gd" type="Script" id=2]
@@ -13,7 +13,8 @@
 [ext_resource path="res://src/enemies/xsm/HasTarget.gd" type="Script" id=11]
 [ext_resource path="res://src/enemies/xsm/Hover.gd" type="Script" id=12]
 [ext_resource path="res://src/enemies/xsm/Hurt.gd" type="Script" id=13]
-[ext_resource path="res://src/enemies/ExplodingEasyGhost.tscn" type="PackedScene" id=14]
+[ext_resource path="res://assets/gfx/lights/nRmVV.png" type="Texture" id=14]
+[ext_resource path="res://assets/gfx/npcs/crosshair002.png" type="Texture" id=15]
 
 [sub_resource type="Shader" id=9]
 code = "shader_type canvas_item;
@@ -101,6 +102,8 @@ animations = [ {
 } ]
 
 [sub_resource type="CapsuleShape2D" id=8]
+radius = 16.0
+height = 108.0
 
 [sub_resource type="Animation" id=4]
 resource_name = "Attack"
@@ -384,8 +387,16 @@ debug_mode = false
 timed = false
 next_state = NodePath("")
 
-[node name="ExplodingGhost" parent="." instance=ExtResource( 14 )]
-emitting = false
+[node name="Light2D" type="Light2D" parent="."]
+position = Vector2( 2, -96 )
+texture = ExtResource( 14 )
+texture_scale = 2.0
+range_layer_min = -101
+range_item_cull_mask = 7
+
+[node name="Crosshair" type="Sprite" parent="."]
+visible = false
+texture = ExtResource( 15 )
 
 [connection signal="body_entered" from="DetectionBox" to="." method="_on_DetectionBox_body_entered"]
 [connection signal="body_exited" from="DetectionBox" to="." method="_on_DetectionBox_body_exited"]

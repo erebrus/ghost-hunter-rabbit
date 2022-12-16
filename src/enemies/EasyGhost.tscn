@@ -58,6 +58,7 @@ detection_radius = 750.0
 [node name="Sprite" parent="." index="0"]
 frames = SubResource( 4 )
 animation = "walk"
+frame = 1
 offset = Vector2( 0, -128 )
 
 [node name="CollisionShape2D" parent="." index="1"]
@@ -96,12 +97,6 @@ cast_to = Vector2( 90, 0 )
 
 [node name="RecoveryTimer" parent="." index="7"]
 wait_time = 3.0
-
-[node name="Alive" parent="XSM" index="0"]
-next_state = NodePath("../Death")
-
-[node name="OnPlatform" parent="XSM/Alive" index="0"]
-next_state = NodePath("../Flying")
 
 [node name="ReturnToPatrol" parent="XSM/Alive/Flying" index="0"]
 anim_on_enter = "Walk"
