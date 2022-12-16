@@ -50,12 +50,13 @@ onready var v0:float = 2 * h / th
 #onready var v0:float = sqrt(2 * h * g)
 
 var dead:bool = false
+var firing:bool = false
 
 onready var sprite = $Sprite
 onready var collision_shape = $CollisionShape2D
 onready var sfx_jump = $Jump
 onready var sfx_carrot = $Carrot
-onready var beam = $Muzzle/Beam
+onready var beam = $Gun/Sprite/Beam
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -73,6 +74,7 @@ func _get_actual_g()->float:
 	else:
 		return g#*.5
 		
+
 func _process(delta: float) -> void:
 	
 	#if we are in animation, gravity still works
@@ -159,12 +161,13 @@ func setup_debug(val:bool):
 	else:
 		HyperLog.remove_log(self)
 		
-		
+
+
 func update_sprite():
 	var prev_state = state
 
 	if is_on_floor():
-		if velocity.x==0:
+		if velocity.x==0 and not firing:
 			state = IDLE
 			sprite.animation=animations[state]
 			sprite.stop()
@@ -177,14 +180,19 @@ func update_sprite():
 		else:
 			state = FALL
 			
-	if velocity.x != 0:
+	if firing:
+		var target_pos = get_global_mouse_position()
+		sprite.flip_h = (target_pos - global_position).x<0
+	elif velocity.x != 0:
 		sprite.flip_h = velocity.x<0			
+	if velocity.x != 0:
 		last_direction = Vector2(velocity.x,0).normalized()
 	
-		
+	
 	if prev_state != state:
 #		Logger.info("changing anim state from %s to %s" % [prev_state, state])
 		sprite.play(animations[state])
+
 
 func do_jump():
 	if jump_available:	
@@ -307,19 +315,46 @@ func do_attack1():
 	can_shoot=false
 	$ReloadTimer.start()
 	
-		
 func fire_beam():
+	var gun = $Gun/Sprite
 	if not beam.is_casting:
 		beam.set_is_casting(true)
 	var target_pos = get_global_mouse_position()
-	beam.rotation = (target_pos - global_position).angle()
+	var angle = (target_pos - gun.global_position).angle()
+	print("angle:%f (%f) 3*PI/4:%f" % [angle, rad2deg(angle), 3*PI/4])
+	if not sprite.flip_h:
+		angle = clamp(angle, -PI/4, PI/4)
+	else:
+		#angle = clamp(angle, PI/4+PI/2, PI/4+PI)
+
+		if angle > -3*PI/4 and angle < 0:
+			angle = -3*PI/4
+		elif angle < 3*PI/4 and angle >0:
+			angle = 3*PI/4
+		
+		
+	
+	gun.rotation = angle
+	if not sprite.flip_h:
+		$Gun/Sprite.flip_v= false	
+		if sign(beam.position.y) <0:
+			 beam.position.y *= -1
+	else:		
+		$Gun/Sprite.flip_v= true	
+		if sign(beam.position.y) >0:
+			 beam.position.y *= -1
+		
+#	beam.rotation = (target_pos - global_position).angle()
 		#gun rotation
-#		firing = true
+	firing = true
+	$Gun/Sprite.visible=true
+	
 		
 func stop_beam():
 	if beam.is_casting:
 		beam.set_is_casting(false)
-#	firing = false
+	firing = false
+	$Gun/Sprite.visible=false
 
 
 func _on_ReloadTimer_timeout():
