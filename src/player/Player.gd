@@ -280,7 +280,7 @@ func reset_jump_buffer():
 func reset_hangtime():
 	hanging = false
 	
-func take_damage(source, damage):
+func take_damage(source, damage, do_ouch=true):
 	if dead:
 		return
 #	get_tree().quit()
@@ -290,11 +290,16 @@ func take_damage(source, damage):
 	if hp == 0:
 		dead = true		
 		sprite.play("death")
-		$Hurt.play()
+		if do_ouch:
+			$Hurt.play()
 	else:
 		sprite.play("hurt")
-		$Hurt.play()
-	yield(sprite,"animation_finished")	
+		if do_ouch:
+			$Hurt.play()
+	if do_ouch:
+		yield(sprite,"animation_finished")	
+	else:
+		yield(get_tree().create_timer(1), "timeout")
 	if dead:
 		yield(get_tree().create_timer(1), "timeout")
 		Logger.info("player died: %s" % sprite.animation)	

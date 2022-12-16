@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://src/enemies/Enemy.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/gfx/npcs/evil_standing2.png" type="Texture" id=2]
@@ -52,6 +52,9 @@ height = 108.0
 [sub_resource type="CircleShape2D" id=6]
 radius = 550.0
 
+[sub_resource type="RectangleShape2D" id=8]
+extents = Vector2( 129, 64 )
+
 [node name="EvilGhost" instance=ExtResource( 1 )]
 script = ExtResource( 11 )
 engage_speed = 150.0
@@ -60,7 +63,6 @@ charge_speed = 250.0
 [node name="Sprite" parent="." index="0"]
 frames = SubResource( 1 )
 animation = "run"
-frame = 1
 offset = Vector2( 0, -128 )
 
 [node name="CollisionShape2D" parent="." index="1"]
@@ -90,12 +92,6 @@ cast_to = Vector2( 71, 221 )
 [node name="FrontRaycast" parent="." index="5"]
 cast_to = Vector2( 78, 0 )
 
-[node name="Alive" parent="XSM" index="0"]
-next_state = NodePath("../Death")
-
-[node name="OnPlatform" parent="XSM/Alive" index="0"]
-next_state = NodePath("../Flying")
-
 [node name="Patrol" parent="XSM/Alive/OnPlatform" index="1"]
 engage_directly = true
 
@@ -111,7 +107,7 @@ stop_range = 125.0
 attack_range = 185.0
 attack_delay = 0.5
 anim_on_enter = ""
-next_state = NodePath("../Attack")
+next_state = NodePath("")
 
 [node name="Attack" parent="XSM/Alive/Flying/HasTarget" index="3"]
 script = ExtResource( 9 )
@@ -119,4 +115,14 @@ next_state = NodePath("")
 
 [node name="sfxScream" type="AudioStreamPlayer2D" parent="." index="11"]
 stream = ExtResource( 10 )
-volume_db = -48.941
+
+[node name="ScreamBox" type="Area2D" parent="." index="13"]
+collision_layer = 1024
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ScreamBox" index="0"]
+position = Vector2( 128, -104 )
+shape = SubResource( 8 )
+disabled = true
+
+[connection signal="body_entered" from="ScreamBox" to="." method="_on_ScreamBox_body_entered"]
