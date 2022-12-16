@@ -16,9 +16,18 @@ func _on_anim_finished(_name: String) -> void:
 # This function is called when the state enters
 # XSM enters the root first, the the children
 func _on_enter(_args) -> void:
+#	owner.light_mask=7
+#	owner.velocity=Vector2.ZERO
+#	yield(get_tree().create_timer(1), "timeout")
+#	var tween = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+#	tween.tween_property(owner.material,"shader_param/deformation", Vector2(.4,0), .4)
+#	tween.parallel().tween_property(owner.material,"shader_param/bulge", -1.1, .4)
+#	tween.parallel().tween_property(owner.sprite, "scale", Vector2(1,.4),.7).set_ease(Tween.EASE_IN)
+#	tween.parallel().tween_property(owner.sprite, "offset", Vector2(0,312),.7).set_ease(Tween.EASE_IN)		
+##	tween.parallel().tween_property($GoodScare, "modulate", Color(1,1,1,0),.6).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)		
+	
+	#yield(tween,"finished")
 	owner.do_death()
-	#add_timer("death",1)
-#	owner.desired_velocity=Vector2.ZERO
 
 
 # This function is called just after the state enters
@@ -31,11 +40,6 @@ func _after_enter(_args) -> void:
 # XSM updates the root first, then the children
 func _on_update(_delta: float) -> void:
 	pass
-#	if owner.can_recover:
-#		if owner.target:
-#			change_state("MoveToHoverPoint")
-#		else:
-#			change_state("ReturnToPatrol")
 
 
 # This function is called each frame after all the update calls
@@ -63,5 +67,4 @@ func _state_timeout() -> void:
 
 # Called when any other Timer times out
 func _on_timeout(_name) -> void:
-	if _name=="death":
-		owner.do_death()
+	pass

@@ -52,6 +52,7 @@ height = 66.0
 radius = 550.0
 
 [node name="EasyGhost" instance=ExtResource( 1 )]
+detection_radius = 750.0
 
 [node name="Sprite" parent="." index="0"]
 frames = SubResource( 4 )
@@ -111,8 +112,11 @@ next_state = NodePath("../../../Death")
 next_state = NodePath("../../../../Death")
 
 [node name="Hover" parent="XSM/Alive/Flying/HasTarget" index="1"]
+min_hover_time = 1.0
+max_hover_time = 2.5
+hover_radius = 75.0
 next_state = NodePath("../../../../Death")
 
 [node name="Engage" parent="XSM/Alive/Flying/HasTarget" index="2"]
+max_change_duration = 2.0
 anim_on_enter = ""
-next_state = NodePath("../MoveToHoverPoint")

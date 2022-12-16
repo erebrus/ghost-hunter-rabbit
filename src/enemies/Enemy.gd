@@ -106,7 +106,7 @@ func _on_ReloadTimer_timeout() -> void:
 func _on_DetectionBox_body_entered(body: Node) -> void:
 	if body == Globals.get_player():
 		target = body
-		detection_box.shape.radius=detection_radius*2
+		detection_box.shape.radius=detection_radius*3
 
 
 func _on_DetectionBox_body_exited(body: Node) -> void:
@@ -149,3 +149,14 @@ func hit_by_beam(dmg):
 func _on_RecoveryTimer_timeout():
 	can_recover=true
 	emit_signal("start_recovery")
+
+func do_death():
+	
+	#$ExplodingGhost.initialize(load("res://assets/gfx/npcs/good_scare.png"))
+	#sprite.visible=false
+	#yield(get_tree().create_timer(1),"timeout")
+	var tween = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	tween.tween_property(sprite,"modulate", Color(1,1,1,0), 1)
+	yield(tween, "finished")
+	queue_free()
+	
