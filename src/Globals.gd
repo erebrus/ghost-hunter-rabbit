@@ -9,15 +9,14 @@ const COLOR2 = Color("#5E20A0")
 const COLOR3 = Color("#1E5B9A")
 
 
-var music:bool = true
+var master_volume:float = 100
+var music_volume:float = 100
+var sfx_volume:float = 100
+var darkness:float = .99
+
 func _ready():
 	_init_logger()	
 
-func toggle_music()-> void:
-	music = not music
-	AudioServer.set_bus_mute(AudioServer.get_bus_index("music"),not music)
-			
-	
 func _init_logger():
 	Logger.set_logger_level(Logger.LOG_LEVEL_INFO)
 	Logger.set_logger_format(Logger.LOG_FORMAT_MORE)

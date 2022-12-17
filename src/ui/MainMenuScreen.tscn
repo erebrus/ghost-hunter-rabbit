@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://assets/gfx/png1x/bg-cave.png" type="Texture" id=1]
 [ext_resource path="res://src/ui/MainMenu.tscn" type="PackedScene" id=2]
@@ -13,6 +13,7 @@
 [ext_resource path="res://assets/gfx/lights/nRmVV.png" type="Texture" id=11]
 [ext_resource path="res://assets/gfx/npcs/good_running 2.png" type="Texture" id=12]
 [ext_resource path="res://assets/gfx/npcs/good.running 1.png" type="Texture" id=13]
+[ext_resource path="res://src/ui/OptionsPanel.tscn" type="PackedScene" id=14]
 
 [sub_resource type="SpriteFrames" id=2]
 animations = [ {
@@ -145,12 +146,14 @@ __meta__ = {
 tile_set = ExtResource( 7 )
 format = 1
 tile_data = PoolIntArray( 524288, 12, 1, 524289, 12, 1, 524290, 12, 1, 524291, 12, 1, 524292, 12, 1, 524293, 12, 1, 524294, 12, 1, 524295, 12, 1, 524296, 12, 1, 524297, 12, 1, 524298, 12, 1, 524299, 12, 1, 524300, 12, 1, 524301, 12, 1, 524302, 12, 1, 524303, 12, 1, 589824, 12, 65537, 589825, 12, 65537, 589826, 12, 65537, 589827, 12, 65537, 589828, 12, 65537, 589829, 12, 65537, 589830, 12, 65537, 589831, 12, 65537, 589832, 12, 65537, 589833, 12, 65537, 589834, 12, 65537, 589835, 12, 65537, 589836, 12, 65537, 589837, 12, 65537, 589838, 12, 65537, 589839, 12, 65537 )
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="Player" type="AnimatedSprite" parent="TileMap"]
 position = Vector2( 252, 467 )
 scale = Vector2( 0.5, 0.5 )
 frames = SubResource( 2 )
-frame = 1
 playing = true
 
 [node name="Light2D" type="Light2D" parent="TileMap/Player"]
@@ -216,12 +219,17 @@ mode = 1
 range_layer_min = -101
 range_layer_max = 101
 range_item_cull_mask = 7
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 layer = 128
 
 [node name="MainMenu" parent="CanvasLayer" instance=ExtResource( 2 )]
 light_mask = 0
+
+[node name="OptionsPanel" parent="CanvasLayer" instance=ExtResource( 14 )]
 
 [node name="ForegroundParalax" type="ParallaxBackground" parent="."]
 layer = 100

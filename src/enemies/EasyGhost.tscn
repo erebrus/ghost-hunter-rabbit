@@ -100,6 +100,12 @@ cast_to = Vector2( 90, 0 )
 [node name="RecoveryTimer" parent="." index="8"]
 wait_time = 3.0
 
+[node name="Alive" parent="XSM" index="0"]
+next_state = NodePath("../Death")
+
+[node name="OnPlatform" parent="XSM/Alive" index="0"]
+next_state = NodePath("../Flying")
+
 [node name="ReturnToPatrol" parent="XSM/Alive/Flying" index="0"]
 anim_on_enter = "Walk"
 anim_times_to_play = 1

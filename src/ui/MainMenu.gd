@@ -14,7 +14,8 @@ func _ready():
 
 func _process(delta: float) -> void:
 #	title.rect_position = title_pos_ori + Vector2(0,1)*sin(OS.get_ticks_msec()/100)*6
-	menu_items[MenuOption.MUSIC].text = "MUSIC: ON" if Globals.music else "MUSIC: OFF"
+	#menu_items[MenuOption.MUSIC].text = "MUSIC: ON" if Globals.music else "MUSIC: OFF"
+	pass
 
 func update_option(new_option):
 	selected_option = clamp(new_option,0, menu_items.size())
