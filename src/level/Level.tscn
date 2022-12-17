@@ -85,7 +85,7 @@ shader_param/blueVal = 1.0
 shader_param/tint_color = Color( 0.203922, 0.992157, 0.843137, 1 )
 shader_param/tint_effect_factor = 0.678
 
-[sub_resource type="Shader" id=14]
+[sub_resource type="Shader" id=21]
 code = "shader_type canvas_item;
 
 // Gonkee's fog shader for Godot 3 - full tutorial https://youtu.be/QEaTsz_0o44
@@ -137,7 +137,7 @@ void fragment() {
 }"
 
 [sub_resource type="ShaderMaterial" id=19]
-shader = SubResource( 14 )
+shader = SubResource( 21 )
 shader_param/ori_color = Color( 0.0313726, 0.0392157, 0.0588235, 1 )
 shader_param/OCTAVES = 7
 

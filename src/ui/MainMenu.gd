@@ -1,5 +1,7 @@
 extends Control
 
+const SELECTED_FONT= preload("res://assets/resources/menu_item_selected_font.tres")
+const NOT_SELECTED_FONT= preload("res://assets/resources/menu_item_not_selected_font.tres")
 
 enum MenuOption {START,START_RANDOM, MUSIC, QUIT}
 
@@ -21,9 +23,9 @@ func update_option(new_option):
 	selected_option = clamp(new_option,0, menu_items.size())
 	for i in range(menu_items.size()):
 		if selected_option==i:
-			menu_items[i].set("custom_colors/font_color", Color("#5e20a0"))	
+			menu_items[i].set("custom_fonts/font", SELECTED_FONT)	
 		else:
-			menu_items[i].set("custom_colors/font_color", Color("#1e5b9a"))	
+			menu_items[i].set("custom_fonts/font", NOT_SELECTED_FONT)	
 	select_button_sfx.play()
 	
 func on_selected_option():
