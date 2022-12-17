@@ -1,0 +1,271 @@
+[gd_scene load_steps=15 format=2]
+
+[ext_resource path="res://src/player/Hunter.tscn" type="PackedScene" id=1]
+[ext_resource path="res://src/level/CaveAreaTemplate2048.tscn" type="PackedScene" id=2]
+[ext_resource path="res://assets/gfx/png1x/bg-cave - 2048.png" type="Texture" id=3]
+[ext_resource path="res://assets/gfx/lights/white.png" type="Texture" id=6]
+[ext_resource path="res://assets/gfx/png1x/tileset-cave.png" type="Texture" id=7]
+[ext_resource path="res://src/level/sway.gdshader" type="Shader" id=8]
+[ext_resource path="res://assets/gfx/png1x/bottom_sta.png" type="Texture" id=9]
+[ext_resource path="res://src/level/Level.gd" type="Script" id=10]
+[ext_resource path="res://assets/sfx/12. Lose_Game/Lose_Game_01.wav" type="AudioStream" id=13]
+[ext_resource path="res://assets/sfx/13.Open_New_Level/Open_New_level_01.wav" type="AudioStream" id=14]
+[ext_resource path="res://assets/Complete_Level_02.wav" type="AudioStream" id=15]
+
+[sub_resource type="Shader" id=21]
+code = "shader_type canvas_item;
+
+// Gonkee's fog shader for Godot 3 - full tutorial https://youtu.be/QEaTsz_0o44
+// If you use this shader, I would prefer it if you gave credit to me and my channel
+
+uniform vec4 ori_color:hint_color = vec4(0.35, 0.48, 0.95,1.);
+//uniform vec3 color = vec3(0.35, 0.48, 0.95);
+uniform int OCTAVES = 4;
+
+float rand(vec2 coord){
+	return fract(sin(dot(coord, vec2(56, 78)) * 1000.0) * 1000.0);
+}
+
+float noise(vec2 coord){
+	vec2 i = floor(coord);
+	vec2 f = fract(coord);
+
+	// 4 corners of a rectangle surrounding our point
+	float a = rand(i);
+	float b = rand(i + vec2(1.0, 0.0));
+	float c = rand(i + vec2(0.0, 1.0));
+	float d = rand(i + vec2(1.0, 1.0));
+
+	vec2 cubic = f * f * (3.0 - 2.0 * f);
+
+	return mix(a, b, cubic.x) + (c - a) * cubic.y * (1.0 - cubic.x) + (d - b) * cubic.x * cubic.y;
+}
+
+float fbm(vec2 coord){
+	float value = 0.0;
+	float scale = 0.5;
+
+	for(int i = 0; i < OCTAVES; i++){
+		value += noise(coord) * scale;
+		coord *= 2.0;
+		scale *= 0.5;
+	}
+	return value;
+}
+
+void fragment() {
+	vec2 coord = UV * 20.0;
+
+	vec2 motion = vec2( fbm(coord + vec2(TIME * -0.5, TIME * 0.5)) );
+
+	float final = fbm(coord + motion);
+
+	COLOR = vec4(ori_color.rgb, final * 0.5);
+}"
+
+[sub_resource type="ShaderMaterial" id=19]
+shader = SubResource( 21 )
+shader_param/ori_color = Color( 0.0313726, 0.0392157, 0.0588235, 1 )
+shader_param/OCTAVES = 7
+
+[sub_resource type="ShaderMaterial" id=20]
+shader = ExtResource( 8 )
+shader_param/speed = 1.0
+shader_param/minStrength = 0.1
+shader_param/maxStrength = 0.03
+shader_param/strengthScale = 200.0
+shader_param/interval = 3.5
+shader_param/detail = 1.0
+shader_param/distortion = 1.0
+shader_param/heightOffset = 0.5
+shader_param/offset = 0.0
+
+[node name="Level" type="Node2D"]
+script = ExtResource( 10 )
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="Far" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0.4, 0.2 )
+motion_offset = Vector2( 0, -256 )
+motion_mirroring = Vector2( 2048, 0 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="BG" type="Sprite" parent="ParallaxBackground/Far"]
+position = Vector2( 580, 66 )
+texture = ExtResource( 3 )
+
+[node name="Medium" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0.5, 1 )
+motion_mirroring = Vector2( 1024, 0 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Close" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0.8, 1 )
+motion_mirroring = Vector2( 1024, 0 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="VeryClose" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0.9, 1 )
+motion_mirroring = Vector2( 1024, 0 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Tilemaps" type="Node2D" parent="."]
+position = Vector2( 0, 60 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Level" parent="Tilemaps" instance=ExtResource( 2 )]
+
+[node name="Player" parent="." instance=ExtResource( 1 )]
+unique_name_in_owner = true
+position = Vector2( 76, 443 )
+scale = Vector2( 0.5, 0.5 )
+h = 200.0
+damping_speed = 300.0
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+scale = Vector2( 8, 8 )
+current = true
+limit_left = 0
+limit_top = -1920
+limit_right = 4096
+limit_bottom = 600
+smoothing_enabled = true
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Foreground" type="Node2D" parent="."]
+
+[node name="Darkness" type="Light2D" parent="Foreground"]
+visible = false
+light_mask = 7
+position = Vector2( 2209, 276.5 )
+scale = Vector2( 45.18, 6.53 )
+texture = ExtResource( 6 )
+energy = 0.85
+mode = 1
+range_layer_min = -101
+range_layer_max = 101
+range_item_cull_mask = 7
+
+[node name="HUDLayer" type="CanvasLayer" parent="."]
+
+[node name="Fog" type="ColorRect" parent="HUDLayer"]
+material = SubResource( 19 )
+margin_right = 1023.0
+margin_bottom = 637.0
+
+[node name="Sounds" type="Node2D" parent="."]
+
+[node name="StartLevel" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource( 14 )
+volume_db = -80.0
+bus = "sfx"
+
+[node name="GameOver" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource( 13 )
+volume_db = -80.0
+bus = "sfx"
+
+[node name="LevelComplete" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource( 15 )
+volume_db = -80.0
+bus = "sfx"
+
+[node name="ForegroundParalax" type="ParallaxBackground" parent="."]
+layer = 100
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ForegroundParalax"]
+motion_scale = Vector2( 1.2, 1 )
+motion_mirroring = Vector2( 1024, 0 )
+
+[node name="MushroomBig2" type="Sprite" parent="ForegroundParalax/ParallaxLayer"]
+material = SubResource( 20 )
+position = Vector2( 82, 548 )
+texture = ExtResource( 7 )
+region_enabled = true
+region_rect = Rect2( 320, 384, 192, 192 )
+
+[node name="MushrromMed" type="Sprite" parent="ForegroundParalax/ParallaxLayer"]
+material = SubResource( 20 )
+position = Vector2( 259, 577 )
+texture = ExtResource( 7 )
+region_enabled = true
+region_rect = Rect2( 384, 640, 128, 128 )
+
+[node name="MushroomBig" type="Sprite" parent="ForegroundParalax/ParallaxLayer"]
+material = SubResource( 20 )
+position = Vector2( 549, 557.5 )
+scale = Vector2( 0.895833, 0.880208 )
+texture = ExtResource( 7 )
+flip_h = true
+region_enabled = true
+region_rect = Rect2( 320, 384, 192, 192 )
+
+[node name="MushroomBig3" type="Sprite" parent="ForegroundParalax/ParallaxLayer"]
+material = SubResource( 20 )
+position = Vector2( 892, 558 )
+scale = Vector2( 0.895833, 0.880208 )
+texture = ExtResource( 7 )
+region_enabled = true
+region_rect = Rect2( 320, 384, 192, 192 )
+
+[node name="BotSta" type="Sprite" parent="ForegroundParalax/ParallaxLayer"]
+position = Vector2( 659, 570 )
+scale = Vector2( 0.895833, 0.880208 )
+texture = ExtResource( 9 )
+flip_h = true
+region_rect = Rect2( 320, 384, 192, 192 )
+
+[node name="BotSta2" type="Sprite" parent="ForegroundParalax/ParallaxLayer"]
+position = Vector2( 672, 566 )
+scale = Vector2( 0.895833, 0.880208 )
+texture = ExtResource( 9 )
+region_rect = Rect2( 320, 384, 192, 192 )
+
+[node name="BotSta3" type="Sprite" parent="ForegroundParalax/ParallaxLayer"]
+position = Vector2( 776, 568 )
+scale = Vector2( 0.895833, 0.880208 )
+texture = ExtResource( 9 )
+flip_h = true
+region_rect = Rect2( 320, 384, 192, 192 )
+
+[node name="MushrromMed2" type="Sprite" parent="ForegroundParalax/ParallaxLayer"]
+material = SubResource( 20 )
+position = Vector2( 329, 595 )
+texture = ExtResource( 7 )
+region_enabled = true
+region_rect = Rect2( 384, 640, 128, 128 )
+
+[node name="MushrromMed5" type="Sprite" parent="ForegroundParalax/ParallaxLayer"]
+material = SubResource( 20 )
+position = Vector2( 961, 573 )
+texture = ExtResource( 7 )
+region_enabled = true
+region_rect = Rect2( 384, 640, 128, 128 )
+
+[node name="MushrromMed4" type="Sprite" parent="ForegroundParalax/ParallaxLayer"]
+material = SubResource( 20 )
+position = Vector2( 415, 577 )
+texture = ExtResource( 7 )
+region_enabled = true
+region_rect = Rect2( 256, 768, 128, 128 )
+
+[node name="MushrromMed3" type="Sprite" parent="ForegroundParalax/ParallaxLayer"]
+material = SubResource( 20 )
+position = Vector2( 189, 589 )
+scale = Vector2( 0.929688, 0.890625 )
+texture = ExtResource( 7 )
+region_enabled = true
+region_rect = Rect2( 384, 640, 128, 128 )

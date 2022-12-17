@@ -212,6 +212,7 @@ collision_layer = 4
 script = ExtResource( 7 )
 
 [node name="Trail" type="Particles2D" parent="."]
+light_mask = 7
 position = Vector2( -57, -56 )
 amount = 20
 lifetime = 2.0

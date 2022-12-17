@@ -241,7 +241,7 @@ func control(_delta:float) -> void:
 		velocity.x = 0 
 		
 		
-	if Input.is_action_pressed("jump"):		
+	if Input.is_action_just_pressed("jump"):		
 		#JUMP
 		if is_on_floor() || air_jump_count<max_air_jumps || is_in_coyote_time():
 			do_jump() 
@@ -260,7 +260,8 @@ func control(_delta:float) -> void:
 	if Input.is_action_just_released("jump"):
 		jump_available=true
 		if velocity.y < 0 and not discard_jump:
-			 velocity.y =velocity.y + damping_speed #clamp(velocity.y + damping_speed, velocity.y, 0)
+			Logger.info("short jump")
+			velocity.y =velocity.y + damping_speed #clamp(velocity.y + damping_speed, velocity.y, 0)
 						
 
 #	if Input.is_action_just_pressed("attack"):
@@ -333,8 +334,15 @@ func do_death():
 	get_parent().add_child(soul)
 #	yield(get_tree().create_timer(3), "timeout")
 #	get_tree().quit()
-	
-	
+
+func do_element_death(do_ouch=false):
+	in_animation=true
+	dead = true		
+	sprite.play("death")
+	if do_ouch:
+		$Hurt.play()
+	do_death()
+
 func take_damage(source, damage, do_ouch=true):
 	if dead:
 		return

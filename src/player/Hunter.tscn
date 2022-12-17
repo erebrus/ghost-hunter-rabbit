@@ -60,7 +60,7 @@ animations = [ {
 
 [sub_resource type="CapsuleShape2D" id=2]
 radius = 25.0
-height = 158.0
+height = 96.0
 
 [sub_resource type="Animation" id=3]
 resource_name = "Celebrate"
@@ -222,9 +222,10 @@ collision_layer = 2
 script = ExtResource( 13 )
 max_speed = 375.0
 th = 0.4
-h = 150.0
+h = 250.0
 v_limit = 900.0
 delta_factor = 1.0
+damping_speed = 400.0
 inertia_factor = 1.0
 coyote_time = 0.1
 jump_buffer = 0.1
@@ -250,7 +251,7 @@ animation = "attack"
 offset = Vector2( -12, 48 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( 0, -107 )
+position = Vector2( 2, -75 )
 shape = SubResource( 2 )
 
 [node name="Jump" type="AudioStreamPlayer2D" parent="."]
@@ -280,6 +281,9 @@ texture = ExtResource( 11 )
 texture_scale = 3.0
 range_layer_min = -101
 range_item_cull_mask = 7
+__meta__ = {
+"_edit_lock_": true
+}
 
 [connection signal="timeout" from="ReloadTimer" to="." method="_on_ReloadTimer_timeout"]
 [connection signal="timeout" from="DashTimer" to="." method="_on_DashTimer_timeout"]
