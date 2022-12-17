@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://src/player/Hunter.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/enemies/EasyGhost.tscn" type="PackedScene" id=2]
@@ -6,7 +6,6 @@
 [ext_resource path="res://src/level/CaveArea.tscn" type="PackedScene" id=4]
 [ext_resource path="res://src/enemies/EvilGhost.tscn" type="PackedScene" id=5]
 [ext_resource path="res://assets/gfx/lights/white.png" type="Texture" id=6]
-[ext_resource path="res://src/enemies/Enemy.gd" type="Script" id=7]
 [ext_resource path="res://src/level/Level.gd" type="Script" id=10]
 [ext_resource path="res://assets/sfx/12. Lose_Game/Lose_Game_01.wav" type="AudioStream" id=13]
 [ext_resource path="res://assets/sfx/13.Open_New_Level/Open_New_level_01.wav" type="AudioStream" id=14]
@@ -204,14 +203,12 @@ light_mask = 1
 material = null
 position = Vector2( 191, 1164 )
 scale = Vector2( 0.4, 0.4 )
-script = ExtResource( 7 )
 
 [node name="EasyGhost2" parent="." instance=ExtResource( 2 )]
 light_mask = 1
 material = null
 position = Vector2( 954, 1375 )
 scale = Vector2( 0.4, 0.4 )
-script = ExtResource( 7 )
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
 unique_name_in_owner = true
