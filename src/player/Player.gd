@@ -269,7 +269,7 @@ func control(_delta:float) -> void:
 	else:
 		stop_beam()
 
-	if Input.is_action_just_pressed("dash") and can_dash:
+	if Input.is_action_just_pressed("dash") and input.x != 0 and can_dash:
 		do_dash()
 
 func do_dash_sprite(duration:float):
