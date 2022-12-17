@@ -33,6 +33,6 @@ tile_data = PoolIntArray( 65539, 8, 0, 131074, 0, 0, 131075, 0, 1, 131076, 0, 1,
 position = Vector2( 1254, 201 )
 
 [node name="Orb2" parent="Collectibles" instance=ExtResource( 2 )]
-position = Vector2( 506, 400 )
+position = Vector2( 486, 413 )
 
 [node name="Enemies" type="Node2D" parent="."]
