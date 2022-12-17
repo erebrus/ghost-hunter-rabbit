@@ -1,9 +1,11 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://assets/gfx/ui/032.png" type="Texture" id=1]
 [ext_resource path="res://assets/gfx/ui/033.png" type="Texture" id=2]
 [ext_resource path="res://assets/fonts/Kenney Bold.ttf" type="DynamicFontData" id=3]
 [ext_resource path="res://src/ui/OptionsPanel.gd" type="Script" id=4]
+[ext_resource path="res://assets/fonts/Cartoon Fun.ttf" type="DynamicFontData" id=5]
+[ext_resource path="res://assets/fonts/NexaText-Trial-Book.ttf" type="DynamicFontData" id=6]
 
 [sub_resource type="DynamicFont" id=43]
 size = 10
@@ -34,7 +36,8 @@ margin_top = 4.0
 margin_bottom = 4.0
 
 [sub_resource type="DynamicFont" id=41]
-font_data = ExtResource( 3 )
+size = 22
+font_data = ExtResource( 6 )
 
 [sub_resource type="StyleBoxEmpty" id=42]
 
@@ -55,7 +58,7 @@ corner_radius_bottom_left = 5
 Button/colors/font_color = Color( 0.929412, 0.745098, 0.121569, 1 )
 Button/colors/font_color_disabled = Color( 0.9, 0.9, 0.9, 0.2 )
 Button/colors/font_color_focus = Color( 0.94, 0.94, 0.94, 1 )
-Button/colors/font_color_hover = Color( 0.94, 0.94, 0.94, 1 )
+Button/colors/font_color_hover = Color( 0.92549, 0.858824, 0.627451, 1 )
 Button/colors/font_color_pressed = Color( 1, 1, 1, 1 )
 Button/constants/hseparation = 2
 Button/fonts/font = SubResource( 43 )
@@ -85,17 +88,21 @@ Panel/styles/panel = SubResource( 8 )
 texture = ExtResource( 1 )
 region_rect = Rect2( 0, 0, 267, 7 )
 
+[sub_resource type="DynamicFont" id=45]
+font_data = ExtResource( 5 )
+
 [node name="OptionsPanel" type="Panel"]
 margin_left = 249.0
 margin_top = 128.0
 margin_right = 833.0
-margin_bottom = 474.0
+margin_bottom = 513.0
 theme = SubResource( 9 )
 script = ExtResource( 4 )
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_bottom = 72.0
 custom_constants/margin_right = 50
 custom_constants/margin_top = 50
 custom_constants/margin_left = 50
@@ -104,29 +111,30 @@ custom_constants/margin_bottom = 50
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
 margin_left = 50.0
 margin_top = 50.0
-margin_right = 557.0
-margin_bottom = 338.0
+margin_right = 534.0
+margin_bottom = 407.0
 
 [node name="GridContainer" type="GridContainer" parent="MarginContainer/VBoxContainer"]
-margin_right = 507.0
-margin_bottom = 248.0
+margin_right = 484.0
+margin_bottom = 270.0
 columns = 2
 
 [node name="MasterLabel" type="MarginContainer" parent="MarginContainer/VBoxContainer/GridContainer"]
-margin_right = 196.0
-margin_bottom = 45.0
+margin_right = 160.0
+margin_bottom = 49.0
 custom_constants/margin_top = 20
 
 [node name="Label" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/MasterLabel"]
 margin_top = 20.0
-margin_right = 196.0
-margin_bottom = 44.0
+margin_right = 160.0
+margin_bottom = 49.0
 text = "Master Volume"
 
 [node name="MasterSlider" type="MarginContainer" parent="MarginContainer/VBoxContainer/GridContainer"]
-margin_left = 200.0
-margin_right = 507.0
-margin_bottom = 45.0
+margin_left = 164.0
+margin_top = 2.0
+margin_right = 484.0
+margin_bottom = 47.0
 size_flags_horizontal = 3
 size_flags_vertical = 4
 custom_constants/margin_right = 20
@@ -136,7 +144,7 @@ custom_constants/margin_left = 20
 [node name="HSlider" type="HSlider" parent="MarginContainer/VBoxContainer/GridContainer/MasterSlider"]
 margin_left = 20.0
 margin_top = 20.0
-margin_right = 287.0
+margin_right = 300.0
 margin_bottom = 45.0
 custom_icons/grabber_disabled = ExtResource( 2 )
 custom_icons/grabber_highlight = ExtResource( 2 )
@@ -148,22 +156,22 @@ min_value = 50.0
 value = 50.0
 
 [node name="MusicLabel" type="MarginContainer" parent="MarginContainer/VBoxContainer/GridContainer"]
-margin_top = 49.0
-margin_right = 196.0
-margin_bottom = 94.0
+margin_top = 53.0
+margin_right = 160.0
+margin_bottom = 102.0
 custom_constants/margin_top = 20
 
 [node name="Label" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/MusicLabel"]
 margin_top = 20.0
-margin_right = 196.0
-margin_bottom = 44.0
+margin_right = 160.0
+margin_bottom = 49.0
 text = "Music Volume"
 
 [node name="MusicSlider" type="MarginContainer" parent="MarginContainer/VBoxContainer/GridContainer"]
-margin_left = 200.0
-margin_top = 49.0
-margin_right = 507.0
-margin_bottom = 94.0
+margin_left = 164.0
+margin_top = 55.0
+margin_right = 484.0
+margin_bottom = 100.0
 size_flags_horizontal = 3
 size_flags_vertical = 4
 custom_constants/margin_right = 20
@@ -173,27 +181,27 @@ custom_constants/margin_left = 20
 [node name="HSlider" type="HSlider" parent="MarginContainer/VBoxContainer/GridContainer/MusicSlider"]
 margin_left = 20.0
 margin_top = 20.0
-margin_right = 287.0
+margin_right = 300.0
 margin_bottom = 45.0
 size_flags_horizontal = 3
 
 [node name="SfxLabel" type="MarginContainer" parent="MarginContainer/VBoxContainer/GridContainer"]
-margin_top = 98.0
-margin_right = 196.0
-margin_bottom = 143.0
+margin_top = 106.0
+margin_right = 160.0
+margin_bottom = 155.0
 custom_constants/margin_top = 20
 
 [node name="Label" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/SfxLabel"]
 margin_top = 20.0
-margin_right = 196.0
-margin_bottom = 44.0
+margin_right = 160.0
+margin_bottom = 49.0
 text = "Sfx Volume"
 
 [node name="SfxSlider" type="MarginContainer" parent="MarginContainer/VBoxContainer/GridContainer"]
-margin_left = 200.0
-margin_top = 98.0
-margin_right = 507.0
-margin_bottom = 143.0
+margin_left = 164.0
+margin_top = 108.0
+margin_right = 484.0
+margin_bottom = 153.0
 size_flags_horizontal = 3
 size_flags_vertical = 4
 custom_constants/margin_right = 20
@@ -203,28 +211,28 @@ custom_constants/margin_left = 20
 [node name="HSlider" type="HSlider" parent="MarginContainer/VBoxContainer/GridContainer/SfxSlider"]
 margin_left = 20.0
 margin_top = 20.0
-margin_right = 287.0
+margin_right = 300.0
 margin_bottom = 45.0
 size_flags_horizontal = 3
 
 [node name="AlphaLabel" type="MarginContainer" parent="MarginContainer/VBoxContainer/GridContainer"]
-margin_top = 147.0
-margin_right = 196.0
-margin_bottom = 248.0
+margin_top = 159.0
+margin_right = 160.0
+margin_bottom = 270.0
 custom_constants/margin_top = 50
 
 [node name="Label" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/AlphaLabel"]
 margin_top = 50.0
-margin_right = 196.0
-margin_bottom = 101.0
+margin_right = 160.0
+margin_bottom = 111.0
 text = "Darkness
 "
 
 [node name="AlphaSlider" type="MarginContainer" parent="MarginContainer/VBoxContainer/GridContainer"]
-margin_left = 200.0
-margin_top = 175.0
-margin_right = 507.0
-margin_bottom = 220.0
+margin_left = 164.0
+margin_top = 192.0
+margin_right = 484.0
+margin_bottom = 237.0
 size_flags_horizontal = 3
 size_flags_vertical = 4
 custom_constants/margin_right = 20
@@ -234,7 +242,7 @@ custom_constants/margin_left = 20
 [node name="HSlider" type="HSlider" parent="MarginContainer/VBoxContainer/GridContainer/AlphaSlider"]
 margin_left = 20.0
 margin_top = 20.0
-margin_right = 287.0
+margin_right = 300.0
 margin_bottom = 45.0
 size_flags_horizontal = 3
 min_value = 0.75
@@ -243,12 +251,13 @@ step = 0.01
 value = 0.99
 
 [node name="Close" type="Button" parent="MarginContainer/VBoxContainer"]
-margin_left = 218.0
-margin_top = 252.0
-margin_right = 288.0
-margin_bottom = 288.0
+margin_left = 199.0
+margin_top = 274.0
+margin_right = 285.0
+margin_bottom = 321.0
 size_flags_horizontal = 4
-text = "Close"
+custom_fonts/font = SubResource( 45 )
+text = "CLOSE"
 
 [connection signal="value_changed" from="MarginContainer/VBoxContainer/GridContainer/MasterSlider/HSlider" to="." method="_on_master_value_changed"]
 [connection signal="value_changed" from="MarginContainer/VBoxContainer/GridContainer/MusicSlider/HSlider" to="." method="_on_music_value_changed"]
