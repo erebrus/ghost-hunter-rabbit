@@ -55,16 +55,18 @@ radius = 550.0
 charge_speed = 275.0
 detection_radius = 750.0
 
-[node name="Sprite" parent="." index="0"]
+[node name="Sprite" parent="." index="1"]
 frames = SubResource( 4 )
 animation = "walk"
 offset = Vector2( 0, -128 )
 
-[node name="CollisionShape2D" parent="." index="1"]
+[node name="CollisionShape2D" parent="." index="2"]
+visible = false
 position = Vector2( 7, -92 )
 shape = SubResource( 7 )
 
-[node name="HurtBox" parent="." index="2"]
+[node name="HurtBox" parent="." index="3"]
+visible = false
 collision_layer = 4
 collision_mask = 3
 monitoring = true
@@ -73,7 +75,8 @@ monitoring = true
 position = Vector2( 9, -105 )
 shape = SubResource( 8 )
 
-[node name="DetectionBox" parent="." index="3"]
+[node name="DetectionBox" parent="." index="4"]
+visible = false
 collision_layer = 512
 collision_mask = 2
 __meta__ = {
@@ -87,14 +90,14 @@ __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="FloorRaycast" parent="." index="4"]
+[node name="FloorRaycast" parent="." index="5"]
 cast_to = Vector2( 106, 236 )
 
-[node name="FrontRaycast" parent="." index="5"]
+[node name="FrontRaycast" parent="." index="6"]
 position = Vector2( 8, -151 )
 cast_to = Vector2( 90, 0 )
 
-[node name="RecoveryTimer" parent="." index="7"]
+[node name="RecoveryTimer" parent="." index="8"]
 wait_time = 3.0
 
 [node name="ReturnToPatrol" parent="XSM/Alive/Flying" index="0"]

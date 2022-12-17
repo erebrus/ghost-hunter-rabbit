@@ -10,6 +10,7 @@ export(float) var look_time=1
 func _on_enter(args) -> void:
 	owner.desired_velocity=Vector2.ZERO
 	add_timer(LOOKOUT_TIMER,look_time)
+	owner.set_trail_type(owner.TrailType.NICE)
 	#owner.get_node("AnimationPlayer").play("default")
 #	done=false	
 #	yield(get_tree().create_timer(look_time),"timeout")

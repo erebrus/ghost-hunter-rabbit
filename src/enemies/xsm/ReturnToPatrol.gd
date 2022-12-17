@@ -17,6 +17,7 @@ func _on_anim_finished(_name: String) -> void:
 # XSM enters the root first, the the children
 func _on_enter(_args) -> void:
 	Logger.info("%s - entered state %s" % [owner.name, name])
+	owner.set_trail_type(owner.TrailType.NICE)
 
 
 # This function is called just after the state enters

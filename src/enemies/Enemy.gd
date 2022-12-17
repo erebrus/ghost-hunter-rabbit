@@ -1,5 +1,11 @@
 extends KinematicBody2D
 
+const NICE_TRAIL_COLOR =Color("#1aedc6")
+const ATTACK_TRAIL_COLOR =Color("#9873bf")
+const TrailMaterials =[
+	preload("res://assets/resources/trail_nice.tres"),
+	preload ("res://assets/resources/trail_attack.tres")]
+enum TrailType {NICE, ATTACK}
 
 const DETECTION_RADIUS:float = 500.0 #TODO set shape radius
 signal player_detected
@@ -36,7 +42,7 @@ onready var attack_box = $HurtBox/CollisionShape2D
 onready var reload_timer = $ReloadTimer
 onready var xsm = $XSM
 onready var hp_bar = $HealthBar
-
+onready var tail = $Trail
 
 var dist_to_enemy:float=0
 onready var original_position:Vector2 = global_position
@@ -47,7 +53,9 @@ func _ready() -> void:
 #	setup_debug(true)
 
 
-
+func set_trail_type(type):
+	$Trail.process_material = TrailMaterials[type]
+	
 func get_facing_direction()->Vector2:
 #	if velocity.x ==0:
 #		return Vector2.ZERO		
@@ -101,6 +109,18 @@ func _process(delta: float) -> void:
 	velocity += delta_velocity.normalized()*min(max_accel, delta_velocity.length())
 	velocity = move_and_slide(velocity, Vector2.UP)
 	dist_to_enemy=-1 if not target else global_position.distance_to(target.global_position)
+	
+	var dvel = desired_velocity.length()	
+	if sign(desired_velocity.x)==1:
+		tail.emitting = true		
+		tail.position.x=-abs(tail.position.x)
+	elif sign(desired_velocity.x)==-1:
+		tail.emitting = true
+		tail.position.x=abs(tail.position.x)
+	else:
+		tail.emitting = false
+
+
 
 func _on_ReloadTimer_timeout() -> void:
 	can_attack = true

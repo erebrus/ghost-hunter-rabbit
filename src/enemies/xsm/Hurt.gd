@@ -16,6 +16,7 @@ func _on_anim_finished(_name: String) -> void:
 # This function is called when the state enters
 # XSM enters the root first, the the children
 func _on_enter(_args) -> void:
+	owner.set_trail_type(owner.TrailType.NICE)
 	owner.do_death()
 	#add_timer("death",1)
 #	owner.desired_velocity=Vector2.ZERO

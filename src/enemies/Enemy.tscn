@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=2]
+[gd_scene load_steps=30 format=2]
 
 [ext_resource path="res://src/enemies/xsm/Attack.gd" type="Script" id=1]
 [ext_resource path="res://src/enemies/xsm/Patrol.gd" type="Script" id=2]
@@ -17,6 +17,8 @@
 [ext_resource path="res://assets/gfx/npcs/crosshair002.png" type="Texture" id=15]
 [ext_resource path="res://assets/ui/yellow_hp_bar_empty_small.png" type="Texture" id=16]
 [ext_resource path="res://assets/ui/yellow_hp_bar_ful_small..png" type="Texture" id=17]
+[ext_resource path="res://addons/kenney_particle_pack/dirt_03.png" type="Texture" id=18]
+[ext_resource path="res://assets/resources/trail_attack.tres" type="Material" id=19]
 
 [sub_resource type="Shader" id=9]
 code = "shader_type canvas_item;
@@ -208,6 +210,14 @@ light_mask = 5
 material = SubResource( 10 )
 collision_layer = 4
 script = ExtResource( 7 )
+
+[node name="Trail" type="Particles2D" parent="."]
+position = Vector2( -57, -56 )
+amount = 20
+lifetime = 2.0
+local_coords = false
+process_material = ExtResource( 19 )
+texture = ExtResource( 18 )
 
 [node name="Sprite" type="AnimatedSprite" parent="."]
 light_mask = 5

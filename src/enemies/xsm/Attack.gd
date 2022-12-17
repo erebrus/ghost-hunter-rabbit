@@ -19,6 +19,7 @@ func _on_anim_finished(_name: String) -> void:
 func _on_enter(_args) -> void:
 	if not owner.target:
 		return
+	owner.set_trail_type(owner.TrailType.ATTACK)
 	Logger.info("%s - entered state %s" % [owner.name, name])
 #	owner.desired_velocity=Vector2.ZERO
 	owner.do_attack()
