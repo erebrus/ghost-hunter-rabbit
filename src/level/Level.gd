@@ -4,7 +4,7 @@ extends Node2D
 const GameOverScene:PackedScene = preload("res://src/ui/GameOverOverlay.tscn")
 #const GameWinScene:PackedScene = preload("res://src/ui/GameWinOverlay.tscn")
 
-var state:int = Globals.WorldState.MATERIAL
+
 
 var paused:bool = false
 #onready var tilemaps=$Tilemaps

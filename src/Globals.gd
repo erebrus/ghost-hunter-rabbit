@@ -3,7 +3,6 @@ extends Node
 signal game_over
 
 enum GameLogLevel {INFO, WARNING, ALERT}
-enum WorldState {MATERIAL, SPECTRAL}
 
 const COLOR1 = Color("#EDBE1F")
 const COLOR2 = Color("#5E20A0")
