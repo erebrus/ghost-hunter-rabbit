@@ -328,6 +328,7 @@ func take_damage(source, damage, do_ouch=true):
 	if dead:
 		return
 #	get_tree().quit()
+	stop_beam()
 	sprite.flip_h = source.global_position < global_position
 	hp = clamp(hp-damage, 0, max_hp)
 	in_animation=true

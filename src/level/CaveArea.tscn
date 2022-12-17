@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://assets/resources/CaveArea.tres" type="TileSet" id=1]
-[ext_resource path="res://src/level/Orb.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/orb/Orb.tscn" type="PackedScene" id=2]
 [ext_resource path="res://src/level/CaveArea.gd" type="Script" id=4]
 
 [node name="Level" type="Node2D"]

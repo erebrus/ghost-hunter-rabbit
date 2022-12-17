@@ -186,6 +186,18 @@ __meta__ = {
 
 [node name="Level" parent="Tilemaps" instance=ExtResource( 4 )]
 
+[node name="EasyGhost" parent="Tilemaps/Level" instance=ExtResource( 2 )]
+light_mask = 1
+material = null
+position = Vector2( 191, 1104 )
+scale = Vector2( 0.4, 0.4 )
+
+[node name="EasyGhost2" parent="Tilemaps/Level" instance=ExtResource( 2 )]
+light_mask = 1
+material = null
+position = Vector2( 954, 1315 )
+scale = Vector2( 0.4, 0.4 )
+
 [node name="EvilGhost" parent="Tilemaps/Level" instance=ExtResource( 5 )]
 light_mask = 1
 material = null
@@ -197,18 +209,6 @@ light_mask = 1
 material = null
 position = Vector2( 2096, 266 )
 scale = Vector2( 0.5, 0.5 )
-
-[node name="EasyGhost" parent="." instance=ExtResource( 2 )]
-light_mask = 1
-material = null
-position = Vector2( 191, 1164 )
-scale = Vector2( 0.4, 0.4 )
-
-[node name="EasyGhost2" parent="." instance=ExtResource( 2 )]
-light_mask = 1
-material = null
-position = Vector2( 954, 1375 )
-scale = Vector2( 0.4, 0.4 )
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
 unique_name_in_owner = true
@@ -240,6 +240,7 @@ light_mask = 7
 position = Vector2( 2209, 276.5 )
 scale = Vector2( 45.18, 6.53 )
 texture = ExtResource( 6 )
+energy = 0.95
 mode = 1
 range_layer_min = -101
 range_item_cull_mask = 7
