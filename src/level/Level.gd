@@ -13,7 +13,10 @@ var lost:bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass
+	Globals.connect("game_over",self, "_on_game_over")
+
+func _on_game_over():
+	get_tree().quit()
 
 
 func do_win():

@@ -1,5 +1,6 @@
 extends Node
 
+signal game_over
 
 enum GameLogLevel {INFO, WARNING, ALERT}
 enum WorldState {MATERIAL, SPECTRAL}

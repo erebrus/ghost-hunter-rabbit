@@ -1,5 +1,6 @@
 extends KinematicBody2D
 
+const SoulScene = preload("res://src/player/PlayerSoul.tscn")
 const PlasmaScene = preload("res://src/player/PlasmaShot.tscn")
 const DashScene = preload ("res://src/player/DashSprite.tscn")
 enum {IDLE, WALK, JUMP, FALL, HURT, DEATH }
@@ -264,7 +265,7 @@ func control(_delta:float) -> void:
 
 #	if Input.is_action_just_pressed("attack"):
 #		do_attack1()
-	if Input.is_action_pressed("attack2"):
+	if Input.is_action_pressed("attack"):
 		fire_beam()
 	else:
 		stop_beam()
@@ -324,6 +325,16 @@ func reset_jump_buffer():
 func reset_hangtime():
 	hanging = false
 	
+func do_death():
+	var soul = SoulScene.instance()
+	soul.global_position = global_position
+	soul.scale *= .5
+	soul.modulate.a=0
+	get_parent().add_child(soul)
+#	yield(get_tree().create_timer(3), "timeout")
+#	get_tree().quit()
+	
+	
 func take_damage(source, damage, do_ouch=true):
 	if dead:
 		return
@@ -337,6 +348,8 @@ func take_damage(source, damage, do_ouch=true):
 		sprite.play("death")
 		if do_ouch:
 			$Hurt.play()
+		#yield(sprite,"animation_finished")
+		do_death()
 	else:
 		sprite.play("hurt")
 		if do_ouch:
@@ -345,12 +358,7 @@ func take_damage(source, damage, do_ouch=true):
 		yield(sprite,"animation_finished")	
 	else:
 		yield(get_tree().create_timer(1), "timeout")
-	if dead:
-		yield(get_tree().create_timer(1), "timeout")
-		Logger.info("player died: %s" % sprite.animation)	
-		#Globals.get_world().do_end()		
-		get_tree().quit()
-	else:
+	if not dead:
 		in_animation=false
 
 
