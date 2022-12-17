@@ -4,9 +4,12 @@ signal sfx_changed(value)
 signal music_changed(value)
 signal master_changed(value)
 
+signal panel_closed()
+
 func _ready():
 	$MarginContainer/VBoxContainer/GridContainer/AlphaSlider/HSlider.value = Globals.darkness
 func _on_Close_pressed():
+	emit_signal("panel_closed")
 	visible=false
 
 

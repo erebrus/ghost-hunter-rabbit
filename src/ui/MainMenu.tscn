@@ -76,13 +76,13 @@ custom_fonts/font = ExtResource( 4 )
 text = "RANDOM RUN"
 align = 1
 
-[node name="Music" type="Label" parent="HBoxContainer/VBoxContainer"]
+[node name="Options" type="Label" parent="HBoxContainer/VBoxContainer"]
 margin_top = 126.0
 margin_right = 341.0
 margin_bottom = 185.0
 custom_colors/font_color = Color( 0.117647, 0.356863, 0.603922, 0 )
 custom_fonts/font = ExtResource( 4 )
-text = "MUSIC: ON"
+text = "Options"
 align = 1
 
 [node name="Quit" type="Label" parent="HBoxContainer/VBoxContainer"]
