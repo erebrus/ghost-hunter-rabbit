@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://assets/sfx/select_button.wav" type="AudioStream" id=1]
 [ext_resource path="res://assets/sfx/402536__pureaudioninja__pan-elfy-sfx-fuzz-swirl-11.wav" type="AudioStream" id=2]
-[ext_resource path="res://assets/fonts/Cartoon Fun.ttf" type="DynamicFontData" id=7]
+[ext_resource path="res://assets/resources/menu_item_selected_font.tres" type="DynamicFont" id=3]
+[ext_resource path="res://assets/resources/menu_item_not_selected_font.tres" type="DynamicFont" id=4]
 [ext_resource path="res://assets/fonts/comicartoon/Comicartoon-Regular.ttf" type="DynamicFontData" id=8]
 [ext_resource path="res://src/ui/MainMenu.gd" type="Script" id=13]
 
@@ -13,18 +14,6 @@ size = 64
 outline_size = 3
 outline_color = Color( 0.58, 0.46226, 0.0754, 1 )
 font_data = ExtResource( 8 )
-
-[sub_resource type="DynamicFont" id=4]
-size = 36
-outline_size = 1
-outline_color = Color( 0.368627, 0.12549, 0.627451, 1 )
-font_data = ExtResource( 7 )
-
-[sub_resource type="DynamicFont" id=5]
-size = 36
-outline_size = 1
-outline_color = Color( 0.117647, 0.356863, 0.603922, 1 )
-font_data = ExtResource( 7 )
 
 [node name="MainMenu" type="PanelContainer"]
 anchor_right = 1.0
@@ -74,7 +63,7 @@ size_flags_vertical = 4
 margin_right = 341.0
 margin_bottom = 59.0
 custom_colors/font_color = Color( 0.368627, 0.12549, 0.627451, 0 )
-custom_fonts/font = SubResource( 4 )
+custom_fonts/font = ExtResource( 3 )
 text = "STANDARD RUN"
 align = 1
 
@@ -83,7 +72,7 @@ margin_top = 63.0
 margin_right = 341.0
 margin_bottom = 122.0
 custom_colors/font_color = Color( 0.117647, 0.356863, 0.603922, 0 )
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = ExtResource( 4 )
 text = "RANDOM RUN"
 align = 1
 
@@ -92,7 +81,7 @@ margin_top = 126.0
 margin_right = 341.0
 margin_bottom = 185.0
 custom_colors/font_color = Color( 0.117647, 0.356863, 0.603922, 0 )
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = ExtResource( 4 )
 text = "MUSIC: ON"
 align = 1
 
@@ -101,7 +90,7 @@ margin_top = 189.0
 margin_right = 341.0
 margin_bottom = 248.0
 custom_colors/font_color = Color( 0.117647, 0.356863, 0.603922, 0 )
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = ExtResource( 4 )
 text = "QUIT"
 align = 1
 
