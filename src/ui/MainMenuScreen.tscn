@@ -1,16 +1,17 @@
 [gd_scene load_steps=15 format=2]
 
-[ext_resource path="res://assets/gfx/Tileset/sheet/mist_close.png" type="Texture" id=1]
+[ext_resource path="res://assets/gfx/png1x/bottom_sta.png" type="Texture" id=1]
 [ext_resource path="res://src/ui/MainMenu.tscn" type="PackedScene" id=2]
 [ext_resource path="res://src/ui/MainMenuScreen.gd" type="Script" id=3]
-[ext_resource path="res://src/level/objects/Carrot.tscn" type="PackedScene" id=5]
-[ext_resource path="res://assets/gfx/Tileset/sheet/treehills.png" type="Texture" id=6]
-[ext_resource path="res://assets/gfx/Tileset/sheet/sky.png" type="Texture" id=7]
-[ext_resource path="res://assets/resources/bunny_anim.tres" type="SpriteFrames" id=8]
-[ext_resource path="res://assets/gfx/Tileset/sheet/treeline.png" type="Texture" id=9]
-[ext_resource path="res://assets/gfx/Tileset/sheet/mist_far.png" type="Texture" id=11]
+[ext_resource path="res://src/orb/Orb.tscn" type="PackedScene" id=5]
+[ext_resource path="res://assets/gfx/world/background2.png" type="Texture" id=6]
+[ext_resource path="res://assets/gfx/world/background1.png" type="Texture" id=7]
+[ext_resource path="res://assets/resources/flux_mat.tres" type="SpriteFrames" id=8]
+[ext_resource path="res://assets/gfx/world/plant 1.png" type="Texture" id=9]
+[ext_resource path="res://assets/gfx/world/spikes.png" type="Texture" id=11]
 [ext_resource path="res://src/level/AreaTemplate.tscn" type="PackedScene" id=12]
-[ext_resource path="res://assets/gfx/Tileset/sheet/finish.png" type="Texture" id=13]
+[ext_resource path="res://assets/gfx/world/checkpoint.png" type="Texture" id=13]
+
 
 [sub_resource type="Animation" id=5]
 resource_name = "Demo"

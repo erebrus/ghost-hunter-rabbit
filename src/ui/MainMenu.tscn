@@ -1,10 +1,11 @@
 [gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://assets/sfx/select_button.wav" type="AudioStream" id=1]
-[ext_resource path="res://assets/sfx/music/8_bit.mp3" type="AudioStream" id=2]
+[ext_resource path="res://assets/sfx/402536__pureaudioninja__pan-elfy-sfx-fuzz-swirl-11.wav" type="AudioStream" id=2]
 [ext_resource path="res://assets/fonts/Cartoon Fun.ttf" type="DynamicFontData" id=7]
 [ext_resource path="res://assets/fonts/comicartoon/Comicartoon-Regular.ttf" type="DynamicFontData" id=8]
 [ext_resource path="res://src/ui/MainMenu.gd" type="Script" id=13]
+
 
 [sub_resource type="StyleBoxEmpty" id=1]
 
