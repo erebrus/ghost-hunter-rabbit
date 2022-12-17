@@ -1,7 +1,7 @@
 extends KinematicBody2D
 
 const PlasmaScene = preload("res://src/player/PlasmaShot.tscn")
-
+const DashScene = preload ("res://src/player/DashSprite.tscn")
 enum {IDLE, WALK, JUMP, FALL, HURT, DEATH }
 const animations = ["default", "walk", "jump", "fall", "hurt", "death"]
  
@@ -270,13 +270,29 @@ func control(_delta:float) -> void:
 		stop_beam()
 
 	if Input.is_action_just_pressed("dash") and can_dash:
-		dash()
+		do_dash()
 
-
-func dash()->void:
+func do_dash_sprite(duration:float):
+	var count = 4
+	var delta:float = duration/count
+	var anim = sprite.animation
+	var fidx = sprite.frame
+	
+	for i in range(count):
+		var dash_sprite = DashScene.instance()
+		dash_sprite.global_position  = global_position + Vector2(0,-55)
+		dash_sprite.flip_h = sprite.flip_h
+		dash_sprite.scale = scale
+		#dash_sprite.offset = sprite.offset
+		dash_sprite.texture = sprite.frames.get_frame(anim, fidx)
+		get_parent().add_child(dash_sprite)
+		yield(get_tree().create_timer(delta), "timeout")
+	
+	
+func do_dash()->void:
 	can_dash=false
 	in_animation=true
-	
+	stop_beam()
 
 	var new_position = global_position + last_direction*dash_distance
 	
@@ -287,6 +303,7 @@ func dash()->void:
 	var dash_duration = .5 * new_distance/dash_distance
 	var tween = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	tween.tween_property(self, "global_position", new_position, dash_duration)
+	do_dash_sprite(dash_duration)
 	yield(tween, "finished")
 	
 	in_animation=false
