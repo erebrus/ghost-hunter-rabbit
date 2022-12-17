@@ -35,6 +35,8 @@ onready var detection_box = $DetectionBox/CollisionShape2D
 onready var attack_box = $HurtBox/CollisionShape2D
 onready var reload_timer = $ReloadTimer
 onready var xsm = $XSM
+onready var hp_bar = $HealthBar
+
 
 var dist_to_enemy:float=0
 onready var original_position:Vector2 = global_position
@@ -89,7 +91,8 @@ func _process(delta: float) -> void:
 	if can_recover and hp != max_hp:		
 		hp+=recovery_rate*delta
 		hp=clamp(hp, 0, max_hp)
-		print("recovering. hp %d" % hp)
+		update_hp()
+		
 	check_direction()
 	
 	#velocity = velocity.linear_interpolate(desired_velocity, .2)
@@ -131,6 +134,13 @@ func take_damage(source, damage):
 		xsm.change_state("Hurt")
 	else:
 		xsm.change_state("Death")
+	update_hp()
+
+
+func update_hp():	
+	hp_bar.value = int(hp/max_hp*100)
+	hp_bar.visible = hp!=max_hp
+		
 
 func hit_by_beam(dmg):
 	hp -= 1
@@ -139,7 +149,7 @@ func hit_by_beam(dmg):
 		can_recover=false
 		emit_signal("under_new_attack")
 	$RecoveryTimer.start()
-	print("hit by beam. hp %d" % hp)
+	update_hp()
 	
 	if hp==0 and not xsm.is_active("Hurt"):
 		xsm.change_state("Hurt")		

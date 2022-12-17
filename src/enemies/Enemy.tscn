@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://src/enemies/xsm/Attack.gd" type="Script" id=1]
 [ext_resource path="res://src/enemies/xsm/Patrol.gd" type="Script" id=2]
@@ -15,6 +15,8 @@
 [ext_resource path="res://src/enemies/xsm/Hurt.gd" type="Script" id=13]
 [ext_resource path="res://assets/gfx/lights/nRmVV.png" type="Texture" id=14]
 [ext_resource path="res://assets/gfx/npcs/crosshair002.png" type="Texture" id=15]
+[ext_resource path="res://assets/ui/yellow_hp_bar_empty_small.png" type="Texture" id=16]
+[ext_resource path="res://assets/ui/yellow_hp_bar_ful_small..png" type="Texture" id=17]
 
 [sub_resource type="Shader" id=9]
 code = "shader_type canvas_item;
@@ -397,6 +399,16 @@ range_item_cull_mask = 7
 [node name="Crosshair" type="Sprite" parent="."]
 visible = false
 texture = ExtResource( 15 )
+
+[node name="HealthBar" type="TextureProgress" parent="."]
+light_mask = 0
+margin_left = -47.0
+margin_top = -265.0
+margin_right = 47.0
+margin_bottom = -248.0
+value = 50.0
+texture_under = ExtResource( 16 )
+texture_progress = ExtResource( 17 )
 
 [connection signal="body_entered" from="DetectionBox" to="." method="_on_DetectionBox_body_entered"]
 [connection signal="body_exited" from="DetectionBox" to="." method="_on_DetectionBox_body_exited"]
