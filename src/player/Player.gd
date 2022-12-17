@@ -9,7 +9,7 @@ const animations = ["default", "walk", "jump", "fall", "hurt", "death"]
 export(float) var max_speed:float = 200
 export(float) var max_accel:float = 40
 export(float) var max_deccel:float = 50
-
+export(float) var dash_distance:float = 250
 export(float) var damage_height:float=700
 export(float) var death_height:float=1500
 
@@ -51,6 +51,8 @@ onready var v0:float = 2 * h / th
 
 var dead:bool = false
 var firing:bool = false
+var can_dash:bool = true
+
 
 onready var sprite = $Sprite
 onready var collision_shape = $CollisionShape2D
@@ -267,7 +269,32 @@ func control(_delta:float) -> void:
 	else:
 		stop_beam()
 
+	if Input.is_action_just_pressed("dash") and can_dash:
+		dash()
+
+
+func dash()->void:
+	can_dash=false
+	in_animation=true
 	
+
+	var new_position = global_position + last_direction*dash_distance
+	
+	var col = move_and_collide(last_direction*dash_distance, true, true, true)
+	if col:
+		new_position = col.position
+	var new_distance = new_position.distance_to(global_position)
+	var dash_duration = .5 * new_distance/dash_distance
+	var tween = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tween.tween_property(self, "global_position", new_position, dash_duration)
+	yield(tween, "finished")
+	
+	in_animation=false
+	$DashTimer.start()
+
+	
+	
+
 func is_in_coyote_time()	:
 	return accept_coyote_jump
 
@@ -359,3 +386,7 @@ func stop_beam():
 
 func _on_ReloadTimer_timeout():
 	can_shoot = true
+
+
+func _on_DashTimer_timeout():
+	can_dash = true

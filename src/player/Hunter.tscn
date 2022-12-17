@@ -270,6 +270,10 @@ position = Vector2( 48, -91 )
 [node name="ReloadTimer" type="Timer" parent="."]
 wait_time = 0.5
 
+[node name="DashTimer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
 [node name="Light2D" type="Light2D" parent="."]
 position = Vector2( 2, -96 )
 texture = ExtResource( 11 )
@@ -278,3 +282,4 @@ range_layer_min = -101
 range_item_cull_mask = 7
 
 [connection signal="timeout" from="ReloadTimer" to="." method="_on_ReloadTimer_timeout"]
+[connection signal="timeout" from="DashTimer" to="." method="_on_DashTimer_timeout"]
