@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://src/player/Hunter.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/level/CaveAreaTemplate2048.tscn" type="PackedScene" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://assets/gfx/png1x/bottom_sta.png" type="Texture" id=9]
 [ext_resource path="res://src/level/Level.gd" type="Script" id=10]
 [ext_resource path="res://src/level/FadingWall.tscn" type="PackedScene" id=11]
+[ext_resource path="res://src/level/Finish.tscn" type="PackedScene" id=12]
 [ext_resource path="res://assets/sfx/12. Lose_Game/Lose_Game_01.wav" type="AudioStream" id=13]
 [ext_resource path="res://assets/sfx/13.Open_New_Level/Open_New_level_01.wav" type="AudioStream" id=14]
 [ext_resource path="res://assets/Complete_Level_02.wav" type="AudioStream" id=15]
@@ -173,10 +174,9 @@ range_item_cull_mask = 7
 
 [node name="Fog" type="ColorRect" parent="HUDLayer"]
 material = SubResource( 19 )
-margin_left = 3.0
-margin_top = -185.0
-margin_right = 1026.0
-margin_bottom = 452.0
+margin_top = -20.0
+margin_right = 1023.0
+margin_bottom = 617.0
 __meta__ = {
 "_edit_lock_": true
 }
@@ -190,6 +190,18 @@ margin_bottom = 294.0
 custom_colors/font_color = Color( 0.929412, 0.745098, 0.121569, 1 )
 custom_fonts/font = SubResource( 22 )
 text = "GAME OVER"
+
+[node name="LevelComplete" type="Label" parent="HUDLayer"]
+visible = false
+margin_left = 183.0
+margin_top = 138.0
+margin_right = 849.0
+margin_bottom = 294.0
+custom_colors/font_color = Color( 0.929412, 0.745098, 0.121569, 1 )
+custom_fonts/font = SubResource( 22 )
+text = "Level 
+Complete"
+align = 1
 
 [node name="Sounds" type="Node2D" parent="."]
 
@@ -295,12 +307,16 @@ texture = ExtResource( 7 )
 region_enabled = true
 region_rect = Rect2( 384, 640, 128, 128 )
 
+[node name="Finish" parent="." instance=ExtResource( 12 )]
+position = Vector2( 1445, 504 )
+
 [node name="FadingWall" parent="." instance=ExtResource( 11 )]
 position = Vector2( 1266, 462 )
-tile_data = PoolIntArray( -196608, 27, 0, -196607, 27, 1, -196606, 27, 1, -196605, 27, 1, -196604, 27, 2, -65537, 27, 131073, -131072, 27, 131073, -131071, 27, 131073, -131070, 27, 65537, -131069, 27, 65537, -131068, 27, 65538, -65536, 27, 65536, -65535, 27, 65537, -65534, 27, 65537, -65533, 27, 65537, -65532, 27, 65538, 0, 27, 131072, 1, 27, 131073, 2, 27, 131073, 3, 27, 131073, 4, 27, 131074 )
+tile_data = PoolIntArray( -196608, 27, 0, -196607, 27, 1, -196606, 27, 1, -196605, 27, 1, -196604, 27, 2, -131072, 27, 65536, -131071, 27, 65537, -131070, 27, 65537, -131069, 27, 65537, -131068, 27, 65538, -65536, 27, 65536, -65535, 27, 65537, -65534, 27, 65537, -65533, 27, 65537, -65532, 27, 65538, 0, 27, 131072, 1, 27, 131073, 2, 27, 131073, 3, 27, 131073, 4, 27, 131074 )
 
 [node name="Checkpoint" parent="." instance=ExtResource( 5 )]
 position = Vector2( 890, 518 )
 max_energy = 200.0
 
+[connection signal="level_complete" from="Finish" to="." method="do_win"]
 [connection signal="checkpoint_full" from="Checkpoint" to="FadingWall" method="dissolve"]

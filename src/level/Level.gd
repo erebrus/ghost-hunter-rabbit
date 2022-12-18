@@ -25,8 +25,7 @@ func _on_darkness_value_changed(new_value:float):
 
 func do_win():
 	paused = true
-	Globals.get_player().velocity=Vector2.ZERO
-#	$HUDLayer.add_child(GameWinScene.instance())
+	$HUDLayer/LevelComplete.visible=true
 	
 func do_end():
 	lost=true
