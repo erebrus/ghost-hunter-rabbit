@@ -1,16 +1,30 @@
-extends HBoxContainer
+extends Control
 
-onready var score_label = $ScoreBox/HBox/ScoreLabel
-#onready var dead_score_label = $ScoreBox/HBox/DeadScoreLabel
-onready var time_label = $HourglassBox/TimeLabel
+const FULL_HEART=preload("res://assets/ui/050-small.png")
+const EMPTY_HEART=preload("res://assets/ui/052-small.png")
 
 	
-func _process(delta):
-	var time = Globals.get_world().time
-	score_label.text="x %d" % Globals.get_world().score
-	time_label.text = "%ds"	 % time
-	if time < 5:
-		time_label.set("custom_colors/font_color", Color("#d25017"))
-	elif time < 10:
-		time_label.set("custom_colors/font_color", Color("#edbe1f"))
 
+func update_health():
+	var health = Globals.get_player().hp
+	var max_health = Globals.get_player().max_hp
+	var container = $MarginContainer/HeathContainer
+	var hp_count=int(health/max_health*5)
+	for i in range(0,hp_count):
+		var heart = container.get_child(i)
+		if heart.texture != FULL_HEART:
+			heart.texture = FULL_HEART
+	if hp_count < 5:
+		for i in range(hp_count,5):
+			var heart = container.get_child(i)
+			if heart.texture != EMPTY_HEART:
+				heart.texture = EMPTY_HEART
+			
+	
+	
+	
+
+
+
+func _on_Player_hp_updated():
+	update_health()

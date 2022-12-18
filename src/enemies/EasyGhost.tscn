@@ -53,6 +53,7 @@ radius = 550.0
 
 [node name="EasyGhost" instance=ExtResource( 1 )]
 charge_speed = 275.0
+attack_damage = 20.0
 detection_radius = 750.0
 
 [node name="Sprite" parent="." index="1"]
@@ -99,12 +100,6 @@ cast_to = Vector2( 90, 0 )
 
 [node name="RecoveryTimer" parent="." index="8"]
 wait_time = 3.0
-
-[node name="Alive" parent="XSM" index="0"]
-next_state = NodePath("../Death")
-
-[node name="OnPlatform" parent="XSM/Alive" index="0"]
-next_state = NodePath("../Flying")
 
 [node name="ReturnToPatrol" parent="XSM/Alive/Flying" index="0"]
 anim_on_enter = "Walk"

@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://src/player/Hunter.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/level/Area1.tscn" type="PackedScene" id=2]
@@ -15,6 +15,7 @@
 [ext_resource path="res://assets/sfx/12. Lose_Game/Lose_Game_01.wav" type="AudioStream" id=13]
 [ext_resource path="res://assets/sfx/13.Open_New_Level/Open_New_level_01.wav" type="AudioStream" id=14]
 [ext_resource path="res://assets/Complete_Level_02.wav" type="AudioStream" id=15]
+[ext_resource path="res://src/ui/HUD.tscn" type="PackedScene" id=16]
 
 [sub_resource type="Shader" id=21]
 code = "shader_type canvas_item;
@@ -136,6 +137,7 @@ __meta__ = {
 }
 
 [node name="Level" parent="Tilemaps" instance=ExtResource( 2 )]
+disable_enemies = false
 
 [node name="Objects" type="Node2D" parent="."]
 position = Vector2( 0, 60 )
@@ -195,6 +197,8 @@ margin_bottom = 617.0
 __meta__ = {
 "_edit_lock_": true
 }
+
+[node name="HUD" parent="HUDLayer" instance=ExtResource( 16 )]
 
 [node name="GameOver" type="Label" parent="HUDLayer"]
 visible = false
@@ -324,3 +328,4 @@ region_rect = Rect2( 384, 640, 128, 128 )
 
 [connection signal="level_complete" from="Objects/Finish" to="." method="do_win"]
 [connection signal="checkpoint_full" from="Objects/Checkpoint" to="Objects/FadingWall" method="dissolve"]
+[connection signal="hp_updated" from="Player" to="HUDLayer/HUD" method="_on_Player_hp_updated"]

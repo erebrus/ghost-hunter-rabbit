@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://assets/gfx/png1x/bg-cave.png" type="Texture" id=1]
 [ext_resource path="res://src/ui/MainMenu.tscn" type="PackedScene" id=2]
@@ -14,6 +14,7 @@
 [ext_resource path="res://assets/gfx/npcs/good_running 2.png" type="Texture" id=12]
 [ext_resource path="res://assets/gfx/npcs/good.running 1.png" type="Texture" id=13]
 [ext_resource path="res://src/ui/OptionsPanel.tscn" type="PackedScene" id=14]
+[ext_resource path="res://src/ui/ControlsPanel.tscn" type="PackedScene" id=15]
 
 [sub_resource type="SpriteFrames" id=2]
 animations = [ {
@@ -293,6 +294,13 @@ light_mask = 0
 
 [node name="OptionsPanel" parent="CanvasLayer" instance=ExtResource( 14 )]
 visible = false
+margin_top = 75.0
+margin_bottom = 460.0
+
+[node name="ControlsPanel" parent="CanvasLayer" instance=ExtResource( 15 )]
+visible = false
+margin_top = 75.0
+margin_bottom = 467.0
 
 [node name="ForegroundParalax" type="ParallaxBackground" parent="."]
 layer = 100

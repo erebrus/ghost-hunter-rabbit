@@ -2,16 +2,25 @@ extends Control
 signal request_open_options()
 signal request_close_options()
 
+signal request_open_controls()
+signal request_close_controls()
+
 const SELECTED_FONT= preload("res://assets/resources/menu_item_selected_font.tres")
 const NOT_SELECTED_FONT= preload("res://assets/resources/menu_item_not_selected_font.tres")
 
-enum MenuOption {START,START_RANDOM, OPTIONS, QUIT}
+enum MenuOption {START,TUTORIAL, CONTROLS, OPTIONS, QUIT}
 
-onready var menu_items = [$HBoxContainer/VBoxContainer/Standard, $HBoxContainer/VBoxContainer/Tutorial, $HBoxContainer/VBoxContainer/Options, $HBoxContainer/VBoxContainer/Quit]
+onready var menu_items = [$HBoxContainer/VBoxContainer/Standard, 
+$HBoxContainer/VBoxContainer/Tutorial,
+$HBoxContainer/VBoxContainer/Controls,
+ $HBoxContainer/VBoxContainer/Options,
+ $HBoxContainer/VBoxContainer/Quit]
 onready var select_button_sfx = $ButtonSelectAudio
 onready var title = $HBoxContainer/Title
 var selected_option = 0 
 var options_open=false
+var controls_open=false
+
 
 onready var title_pos_ori:Vector2 = title.rect_position
 func _ready():
@@ -36,8 +45,11 @@ func on_selected_option():
 	match selected_option:
 		MenuOption.START:
 			LevelManager.start_game()
-		MenuOption.START_RANDOM:
+		MenuOption.TUTORIAL:
 			LevelManager.start_tutorial()
+		MenuOption.CONTROLS:
+			emit_signal("request_open_controls")
+			controls_open=true
 		MenuOption.OPTIONS:
 			emit_signal("request_open_options")
 			options_open=true
@@ -54,10 +66,15 @@ func _unhandled_input(event):
 	if Input.is_action_just_pressed("ui_cancel"):
 		if options_open:
 			emit_signal("request_close_options")
+		elif controls_open:
+			emit_signal("request_close_controls")			
 		else:
 			get_tree().quit()
 	
 func _input(event: InputEvent) -> void:
+	if options_open or controls_open:
+		return
+		
 	if event is InputEventMouseMotion:
 		for i in  range(menu_items.size()):
 			var item:Control = menu_items[i] as Control

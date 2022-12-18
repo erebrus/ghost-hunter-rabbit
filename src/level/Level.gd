@@ -15,7 +15,7 @@ var lost:bool = false
 func _ready():
 	Globals.connect("game_over",self, "_on_game_over")
 	_on_darkness_value_changed(Globals.darkness)
-
+#	Globals.get_player().connect("hp_updated", $HUD, "update_health")
 func _on_game_over():
 	get_tree().quit()
 

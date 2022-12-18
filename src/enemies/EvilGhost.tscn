@@ -59,13 +59,15 @@ extents = Vector2( 129, 64 )
 script = ExtResource( 11 )
 engage_speed = 150.0
 charge_speed = 250.0
+attack_damage = 20.0
 
-[node name="Sprite" parent="." index="0"]
+[node name="Sprite" parent="." index="1"]
 frames = SubResource( 1 )
 animation = "run"
+frame = 1
 offset = Vector2( 0, -128 )
 
-[node name="CollisionShape2D" parent="." index="1"]
+[node name="CollisionShape2D" parent="." index="2"]
 position = Vector2( 8, -104 )
 shape = SubResource( 7 )
 
@@ -73,7 +75,7 @@ shape = SubResource( 7 )
 position = Vector2( 8, -104 )
 shape = SubResource( 7 )
 
-[node name="DetectionBox" parent="." index="3"]
+[node name="DetectionBox" parent="." index="4"]
 visible = false
 __meta__ = {
 "_edit_lock_": true
@@ -86,10 +88,10 @@ __meta__ = {
 "_edit_lock_": true
 }
 
-[node name="FloorRaycast" parent="." index="4"]
+[node name="FloorRaycast" parent="." index="5"]
 cast_to = Vector2( 71, 221 )
 
-[node name="FrontRaycast" parent="." index="5"]
+[node name="FrontRaycast" parent="." index="6"]
 cast_to = Vector2( 78, 0 )
 
 [node name="Patrol" parent="XSM/Alive/OnPlatform" index="1"]

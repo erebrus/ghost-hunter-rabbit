@@ -53,9 +53,9 @@ custom_constants/margin_left = 150
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
 margin_left = 610.0
-margin_top = 128.0
+margin_top = 96.0
 margin_right = 887.0
-margin_bottom = 376.0
+margin_bottom = 407.0
 size_flags_horizontal = 2
 size_flags_vertical = 4
 
@@ -76,19 +76,28 @@ custom_fonts/font = ExtResource( 4 )
 text = "Tutorial"
 align = 1
 
-[node name="Options" type="Label" parent="HBoxContainer/VBoxContainer"]
+[node name="Controls" type="Label" parent="HBoxContainer/VBoxContainer"]
 margin_top = 126.0
 margin_right = 277.0
 margin_bottom = 185.0
+custom_colors/font_color = Color( 0.117647, 0.356863, 0.603922, 0 )
+custom_fonts/font = ExtResource( 4 )
+text = "Controls"
+align = 1
+
+[node name="Options" type="Label" parent="HBoxContainer/VBoxContainer"]
+margin_top = 189.0
+margin_right = 277.0
+margin_bottom = 248.0
 custom_colors/font_color = Color( 0.117647, 0.356863, 0.603922, 0 )
 custom_fonts/font = ExtResource( 4 )
 text = "Options"
 align = 1
 
 [node name="Quit" type="Label" parent="HBoxContainer/VBoxContainer"]
-margin_top = 189.0
+margin_top = 252.0
 margin_right = 277.0
-margin_bottom = 248.0
+margin_bottom = 311.0
 custom_colors/font_color = Color( 0.117647, 0.356863, 0.603922, 0 )
 custom_fonts/font = ExtResource( 4 )
 text = "QUIT"

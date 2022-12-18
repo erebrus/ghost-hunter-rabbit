@@ -286,7 +286,6 @@ tile_data = PoolIntArray( -196608, 27, 0, -196607, 27, 1, -196606, 27, 1, -19660
 unique_name_in_owner = true
 position = Vector2( 46, 505 )
 scale = Vector2( 0.5, 0.5 )
-h = 200.0
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 scale = Vector2( 8, 8 )

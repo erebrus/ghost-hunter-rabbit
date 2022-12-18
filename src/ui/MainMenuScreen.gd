@@ -11,10 +11,18 @@ func _ready() -> void:
 	$TileMap/Paths/AnimationPlayer.play("default")
 	$CanvasLayer/MainMenu.connect("request_open_options", self, "_on_options_open")	
 	$CanvasLayer/MainMenu.connect("request_close_options", self, "_on_options_close")	
+	$CanvasLayer/MainMenu.connect("request_open_controls", self, "_on_controls_open")	
+	$CanvasLayer/MainMenu.connect("request_close_controls", self, "_on_controls_close")	
 	
 	$CanvasLayer/OptionsPanel.connect("darkness_changed", self,"_on_darkness_value_changed")
 	$CanvasLayer/OptionsPanel.connect("panel_closed", self,"_on_options_panel_closed")
+	$CanvasLayer/ControlsPanel.connect("panel_closed", self,"_on_controls_panel_closed")
 	_on_darkness_value_changed(Globals.darkness)
+
+
+func _on_controls_panel_closed():
+	$CanvasLayer/MainMenu.controls_open=false
+
 
 func _on_options_panel_closed():
 	$CanvasLayer/MainMenu.options_open=false
@@ -22,10 +30,17 @@ func _on_options_panel_closed():
 func _on_options_close():
 	$CanvasLayer/MainMenu.options_open=false
 	$CanvasLayer/OptionsPanel.visible=false
-	
-	
+		
 func _on_options_open():
 	$CanvasLayer/OptionsPanel.visible=true
+
+func _on_controls_close():
+	$CanvasLayer/MainMenu.controls_open=false
+	$CanvasLayer/ControlsPanel.visible=false
+		
+func _on_controls_open():
+	$CanvasLayer/ControlsPanel.visible=true
+
 
 func _on_AnimationPlayer_animation_finished(anim_name: String) -> void:
 	if anim_name == "Demo":

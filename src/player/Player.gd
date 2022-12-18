@@ -1,4 +1,5 @@
 extends KinematicBody2D
+signal hp_updated()
 
 const SoulScene = preload("res://src/player/PlayerSoul.tscn")
 const PlasmaScene = preload("res://src/player/PlasmaShot.tscn")
@@ -342,6 +343,8 @@ func reset_hangtime():
 	hanging = false
 	
 func do_death():
+	hp=0
+	emit_signal("hp_updated")	
 	var soul = SoulScene.instance()
 	soul.global_position = global_position
 	soul.scale *= .5
@@ -379,6 +382,7 @@ func take_damage(source, damage, do_ouch=true):
 	stop_beam()
 	sprite.flip_h = source.global_position < global_position
 	hp = clamp(hp-damage, 0, max_hp)
+	emit_signal("hp_updated")	
 	in_animation=true
 	if hp == 0:
 		dead = true		
