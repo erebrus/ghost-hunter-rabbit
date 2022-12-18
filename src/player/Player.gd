@@ -46,7 +46,6 @@ var last_direction:Vector2
 var can_shoot:bool = true
 var orbs:Array = []
 
-
 onready var hp:float = max_hp
 onready var g:float = 2 * h / (th * th)
 onready var v0:float = 2 * h / th
@@ -186,8 +185,15 @@ func update_sprite():
 			state = FALL
 			
 	if firing:
-		var target_pos = get_global_mouse_position()
-		sprite.flip_h = (target_pos - global_position).x<0
+		var aim_input = Input.get_vector("aim_left", "aim_right", "aim_up", "aim_down")
+		if aim_input != Vector2.ZERO:			
+			sprite.flip_h = aim_input.x<0
+		elif Globals.use_controller:
+			sprite.flip_h = last_direction.x<0
+		else:
+			var target_pos = get_global_mouse_position()
+			sprite.flip_h = (target_pos - global_position).x<0
+			
 	elif velocity.x != 0:
 		sprite.flip_h = velocity.x<0			
 	if velocity.x != 0:
@@ -401,8 +407,18 @@ func fire_beam():
 	var gun = $Gun/Sprite
 	if not beam.is_casting:
 		beam.set_is_casting(true)
-	var target_pos = get_global_mouse_position()
-	var angle = (target_pos - gun.global_position).angle()
+	var angle=0
+	var input = Input.get_vector("aim_left", "aim_right", "aim_up", "aim_down")
+	if input != Vector2.ZERO:
+		angle = input.angle()
+	elif Globals.use_controller:
+		angle = last_direction.angle()
+	else:
+		var target_pos = get_global_mouse_position()
+		angle = (target_pos - gun.global_position).angle()
+	
+		
+
 	if not sprite.flip_h:
 		angle = clamp(angle, -PI/3, PI/4)
 	else:

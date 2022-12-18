@@ -14,6 +14,8 @@ var music_volume:float = 100
 var sfx_volume:float = 100
 var darkness:float = .90
 
+var use_controller:=false
+
 func _ready():
 	_init_logger()	
 
