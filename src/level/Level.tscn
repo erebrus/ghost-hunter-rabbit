@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://src/player/Hunter.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/enemies/EasyGhost.tscn" type="PackedScene" id=2]
@@ -149,6 +149,13 @@ outline_color = Color( 0.37, 0.29489, 0.0481, 1 )
 use_filter = true
 font_data = ExtResource( 11 )
 
+[sub_resource type="DynamicFont" id=23]
+size = 96
+outline_size = 3
+outline_color = Color( 0.37, 0.29489, 0.0481, 1 )
+use_filter = true
+font_data = ExtResource( 11 )
+
 [sub_resource type="ShaderMaterial" id=20]
 shader = ExtResource( 8 )
 shader_param/speed = 1.0
@@ -277,6 +284,7 @@ margin_right = 1023.0
 margin_bottom = 637.0
 
 [node name="GameOver" type="Label" parent="HUDLayer"]
+visible = false
 margin_left = 183.0
 margin_top = 138.0
 margin_right = 849.0
@@ -284,6 +292,18 @@ margin_bottom = 294.0
 custom_colors/font_color = Color( 0.929412, 0.745098, 0.121569, 1 )
 custom_fonts/font = SubResource( 22 )
 text = "GAME OVER"
+
+[node name="LevelComplete" type="Label" parent="HUDLayer"]
+visible = false
+margin_left = 183.0
+margin_top = 138.0
+margin_right = 849.0
+margin_bottom = 294.0
+custom_colors/font_color = Color( 0.929412, 0.745098, 0.121569, 1 )
+custom_fonts/font = SubResource( 23 )
+text = "Level 
+Complete"
+align = 1
 
 [node name="Sounds" type="Node2D" parent="."]
 

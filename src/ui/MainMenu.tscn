@@ -54,31 +54,31 @@ custom_constants/margin_left = 150
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
 margin_left = 610.0
 margin_top = 128.0
-margin_right = 951.0
+margin_right = 887.0
 margin_bottom = 376.0
 size_flags_horizontal = 2
 size_flags_vertical = 4
 
 [node name="Standard" type="Label" parent="HBoxContainer/VBoxContainer"]
-margin_right = 341.0
+margin_right = 277.0
 margin_bottom = 59.0
 custom_colors/font_color = Color( 0.368627, 0.12549, 0.627451, 0 )
 custom_fonts/font = ExtResource( 3 )
-text = "STANDARD RUN"
+text = "Start Game"
 align = 1
 
-[node name="Random" type="Label" parent="HBoxContainer/VBoxContainer"]
+[node name="Tutorial" type="Label" parent="HBoxContainer/VBoxContainer"]
 margin_top = 63.0
-margin_right = 341.0
+margin_right = 277.0
 margin_bottom = 122.0
 custom_colors/font_color = Color( 0.117647, 0.356863, 0.603922, 0 )
 custom_fonts/font = ExtResource( 4 )
-text = "RANDOM RUN"
+text = "Tutorial"
 align = 1
 
 [node name="Options" type="Label" parent="HBoxContainer/VBoxContainer"]
 margin_top = 126.0
-margin_right = 341.0
+margin_right = 277.0
 margin_bottom = 185.0
 custom_colors/font_color = Color( 0.117647, 0.356863, 0.603922, 0 )
 custom_fonts/font = ExtResource( 4 )
@@ -87,7 +87,7 @@ align = 1
 
 [node name="Quit" type="Label" parent="HBoxContainer/VBoxContainer"]
 margin_top = 189.0
-margin_right = 341.0
+margin_right = 277.0
 margin_bottom = 248.0
 custom_colors/font_color = Color( 0.117647, 0.356863, 0.603922, 0 )
 custom_fonts/font = ExtResource( 4 )

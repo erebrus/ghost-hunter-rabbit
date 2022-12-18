@@ -7,7 +7,7 @@ const NOT_SELECTED_FONT= preload("res://assets/resources/menu_item_not_selected_
 
 enum MenuOption {START,START_RANDOM, OPTIONS, QUIT}
 
-onready var menu_items = [$HBoxContainer/VBoxContainer/Standard, $HBoxContainer/VBoxContainer/Random, $HBoxContainer/VBoxContainer/Options, $HBoxContainer/VBoxContainer/Quit]
+onready var menu_items = [$HBoxContainer/VBoxContainer/Standard, $HBoxContainer/VBoxContainer/Tutorial, $HBoxContainer/VBoxContainer/Options, $HBoxContainer/VBoxContainer/Quit]
 onready var select_button_sfx = $ButtonSelectAudio
 onready var title = $HBoxContainer/Title
 var selected_option = 0 
@@ -35,9 +35,9 @@ func update_option(new_option):
 func on_selected_option():
 	match selected_option:
 		MenuOption.START:
-			get_tree().change_scene("res://src/level/Level.tscn")
+			LevelManager.start_game()
 		MenuOption.START_RANDOM:
-			get_tree().change_scene("res://src/level/RandomLevel.tscn")
+			LevelManager.start_tutorial()
 		MenuOption.OPTIONS:
 			emit_signal("request_open_options")
 			options_open=true

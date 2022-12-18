@@ -177,13 +177,14 @@ _global_script_class_icons={
 [application]
 
 config/name="Ghost Hunter Rabbit"
-run/main_scene="res://src/level/Level.tscn"
+run/main_scene="res://src/ui/MainMenuScreen.tscn"
 
 [autoload]
 
 Logger="*res://addons/gs_logger/logger.gd"
 HyperLog="*res://addons/hyperlog/hyperlog.tscn"
 Globals="*res://src/Globals.gd"
+LevelManager="*res://src/LevelManager.gd"
 
 [display]
 

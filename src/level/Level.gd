@@ -33,7 +33,7 @@ func do_end():
 	$HUDLayer/GameOver.visible = true
 	Globals.get_player().velocity=Vector2.ZERO
 	yield(get_tree().create_timer(3), "timeout")
-	get_tree().change_scene("res://src/ui/MainMenuScreen.tscn")
+	LevelManager.on_lost()
 
 		
 func _unhandled_input(event: InputEvent) -> void:
