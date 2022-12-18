@@ -1,8 +1,9 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://src/player/Hunter.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/level/CaveAreaTemplate2048.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/gfx/png1x/bg-cave - 2048.png" type="Texture" id=3]
+[ext_resource path="res://assets/fonts/Cartoon Fun.ttf" type="DynamicFontData" id=4]
 [ext_resource path="res://assets/gfx/lights/white.png" type="Texture" id=6]
 [ext_resource path="res://assets/gfx/png1x/tileset-cave.png" type="Texture" id=7]
 [ext_resource path="res://src/level/sway.gdshader" type="Shader" id=8]
@@ -68,6 +69,13 @@ shader = SubResource( 21 )
 shader_param/ori_color = Color( 0.0313726, 0.0392157, 0.0588235, 1 )
 shader_param/OCTAVES = 7
 
+[sub_resource type="DynamicFont" id=22]
+size = 96
+outline_size = 3
+outline_color = Color( 0.37, 0.29489, 0.0481, 1 )
+use_filter = true
+font_data = ExtResource( 4 )
+
 [sub_resource type="ShaderMaterial" id=20]
 shader = ExtResource( 8 )
 shader_param/speed = 1.0
@@ -128,7 +136,7 @@ __meta__ = {
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
 unique_name_in_owner = true
-position = Vector2( 76, 443 )
+position = Vector2( 3439, 272 )
 scale = Vector2( 0.5, 0.5 )
 h = 200.0
 damping_speed = 300.0
@@ -165,6 +173,16 @@ range_item_cull_mask = 7
 material = SubResource( 19 )
 margin_right = 1023.0
 margin_bottom = 637.0
+
+[node name="GameOver" type="Label" parent="HUDLayer"]
+visible = false
+margin_left = 183.0
+margin_top = 138.0
+margin_right = 849.0
+margin_bottom = 294.0
+custom_colors/font_color = Color( 0.929412, 0.745098, 0.121569, 1 )
+custom_fonts/font = SubResource( 22 )
+text = "GAME OVER"
 
 [node name="Sounds" type="Node2D" parent="."]
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://src/player/Hunter.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/enemies/EasyGhost.tscn" type="PackedScene" id=2]
@@ -10,6 +10,7 @@
 [ext_resource path="res://src/level/sway.gdshader" type="Shader" id=8]
 [ext_resource path="res://assets/gfx/png1x/bottom_sta.png" type="Texture" id=9]
 [ext_resource path="res://src/level/Level.gd" type="Script" id=10]
+[ext_resource path="res://assets/fonts/Cartoon Fun.ttf" type="DynamicFontData" id=11]
 [ext_resource path="res://assets/sfx/12. Lose_Game/Lose_Game_01.wav" type="AudioStream" id=13]
 [ext_resource path="res://assets/sfx/13.Open_New_Level/Open_New_level_01.wav" type="AudioStream" id=14]
 [ext_resource path="res://assets/Complete_Level_02.wav" type="AudioStream" id=15]
@@ -141,6 +142,13 @@ shader = SubResource( 21 )
 shader_param/ori_color = Color( 0.0313726, 0.0392157, 0.0588235, 1 )
 shader_param/OCTAVES = 7
 
+[sub_resource type="DynamicFont" id=22]
+size = 96
+outline_size = 3
+outline_color = Color( 0.37, 0.29489, 0.0481, 1 )
+use_filter = true
+font_data = ExtResource( 11 )
+
 [sub_resource type="ShaderMaterial" id=20]
 shader = ExtResource( 8 )
 shader_param/speed = 1.0
@@ -267,6 +275,15 @@ range_item_cull_mask = 7
 material = SubResource( 19 )
 margin_right = 1023.0
 margin_bottom = 637.0
+
+[node name="GameOver" type="Label" parent="HUDLayer"]
+margin_left = 183.0
+margin_top = 138.0
+margin_right = 849.0
+margin_bottom = 294.0
+custom_colors/font_color = Color( 0.929412, 0.745098, 0.121569, 1 )
+custom_fonts/font = SubResource( 22 )
+text = "GAME OVER"
 
 [node name="Sounds" type="Node2D" parent="."]
 

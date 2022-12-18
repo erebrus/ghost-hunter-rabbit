@@ -31,14 +31,16 @@ func do_win():
 func do_end():
 	lost=true
 	paused = true
+	$HUDLayer/GameOver.visible = true
 	Globals.get_player().velocity=Vector2.ZERO
-	print("Game Over. ")	
+	yield(get_tree().create_timer(3), "timeout")
+	get_tree().change_scene("res://src/ui/MainMenuScreen.tscn")
 
 		
 func _unhandled_input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("ui_cancel"):
-		#get_tree().change_scene("res://src/ui/MainMenuScreen.tscn")
-		get_tree().quit()
+		get_tree().change_scene("res://src/ui/MainMenuScreen.tscn")
+		
 	if Input.is_action_just_pressed("restart"):
 		restart()
 	

@@ -332,10 +332,13 @@ func do_death():
 	soul.scale *= .5
 	soul.modulate.a=0
 	get_parent().add_child(soul)
+	Globals.get_world().do_end()
 #	yield(get_tree().create_timer(3), "timeout")
 #	get_tree().quit()
 
 func do_element_death(do_ouch=false):
+	if dead:
+		return
 	in_animation=true
 	dead = true		
 	sprite.play("death")
