@@ -83,8 +83,11 @@ func determine_hover_point() -> void:
 		return
 	var dist = RNGTools.randi_range(MIN_HOVER_DIST, MAX_HOVER_DIST)
 	var x = RNGTools.randi_range(50, owner.DETECTION_RADIUS*.85)
+	if x>dist:
+		x=dist
 	if owner.target.global_position.x > owner.global_position.x:
 		x = -x
+	
 	var angle = asin(abs(x)/dist)
 	var y = -abs(cos(angle)*dist)
 	hover_point = owner.target.global_position + Vector2(x, y)

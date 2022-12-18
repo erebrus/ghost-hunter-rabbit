@@ -1,0 +1,479 @@
+[gd_scene load_steps=25 format=2]
+
+[ext_resource path="res://src/player/Hunter.tscn" type="PackedScene" id=1]
+[ext_resource path="res://src/level/TutorialArea.tscn" type="PackedScene" id=2]
+[ext_resource path="res://assets/gfx/png1x/bg-cave.png" type="Texture" id=3]
+[ext_resource path="res://src/level/Checkpoint.tscn" type="PackedScene" id=4]
+[ext_resource path="res://src/level/FadingWall.tscn" type="PackedScene" id=5]
+[ext_resource path="res://assets/gfx/lights/white.png" type="Texture" id=6]
+[ext_resource path="res://assets/gfx/png1x/tileset-cave.png" type="Texture" id=7]
+[ext_resource path="res://src/level/sway.gdshader" type="Shader" id=8]
+[ext_resource path="res://assets/gfx/png1x/bottom_sta.png" type="Texture" id=9]
+[ext_resource path="res://src/level/Level.gd" type="Script" id=10]
+[ext_resource path="res://assets/fonts/Cartoon Fun.ttf" type="DynamicFontData" id=11]
+[ext_resource path="res://src/level/Finish.tscn" type="PackedScene" id=12]
+[ext_resource path="res://assets/sfx/12. Lose_Game/Lose_Game_01.wav" type="AudioStream" id=13]
+[ext_resource path="res://assets/sfx/13.Open_New_Level/Open_New_level_01.wav" type="AudioStream" id=14]
+[ext_resource path="res://assets/Complete_Level_02.wav" type="AudioStream" id=15]
+[ext_resource path="res://assets/fonts/NexaText-Trial-Book.ttf" type="DynamicFontData" id=16]
+
+[sub_resource type="DynamicFont" id=24]
+size = 24
+font_data = ExtResource( 16 )
+
+[sub_resource type="Shader" id=12]
+code = "shader_type canvas_item;
+render_mode blend_mix,unshaded;
+
+uniform float brightness : hint_range(-1, 1) = 0;
+uniform float contrast : hint_range(0, 3) = 1.0;
+uniform float saturation : hint_range(0, 3) = 1.0;
+
+uniform float redVal : hint_range(0, 1) = 1.0;
+uniform float greenVal : hint_range(0, 1) = 1.0;
+uniform float blueVal : hint_range(0, 1) = 1.0;
+
+uniform vec4 tint_color : hint_color = vec4(1.0, 1.0, 1.0, 1.0);
+uniform float tint_effect_factor : hint_range(0, 1) = 0.0;
+//---------------------------------------------
+//CONTRAST
+//---------------------------------------------
+mat4 contrastMatrix( float _contrast ){
+	float t = ( 1.0 - _contrast ) / 2.0;
+    return mat4( 
+		vec4(_contrast, 0, 0, 0),
+		vec4(0, _contrast, 0, 0),
+		vec4(0, 0, _contrast, 0),
+		vec4(t, t, t, 1));
+}
+//---------------------------------------------
+//BRIGHTNESS
+//---------------------------------------------
+mat4 brightnessMatrix( float _brightness ){
+    return mat4( vec4(1, 0, 0, 0),
+                 vec4(0, 1, 0, 0),
+                 vec4(0, 0, 1, 0),
+                 vec4(_brightness, _brightness, _brightness, 1));
+}
+//---------------------------------------------
+//SATURATION
+//---------------------------------------------
+mat4 saturationMatrix( float _saturation ){
+    vec3 luminance = vec3( 0.3086, 0.6094, 0.0820 );
+    float oneMinusSat = 1.0 - _saturation;
+	
+    vec3 red = vec3( luminance.x * oneMinusSat );
+    red+= vec3(_saturation, 0, 0)*redVal;
+    vec3 green = vec3( luminance.y * oneMinusSat );
+    green += vec3( 0,_saturation, 0 )*greenVal;
+    vec3 blue = vec3( luminance.z * oneMinusSat );
+    blue += vec3( 0, 0,_saturation )*blueVal;
+	
+    return mat4(vec4(red, 0),vec4(green,0),vec4(blue,0),vec4(0, 0, 0, 1));
+}
+
+//---------------------------------------------
+//fragment
+//---------------------------------------------
+void fragment() {
+	vec4 c = texture(SCREEN_TEXTURE, SCREEN_UV);
+	vec4 c2 = c * tint_color;
+	COLOR = brightnessMatrix( brightness ) * contrastMatrix( contrast ) *saturationMatrix( saturation ) * mix(c, c2, tint_effect_factor);
+}"
+
+[sub_resource type="ShaderMaterial" id=18]
+shader = SubResource( 12 )
+shader_param/brightness = 0.0
+shader_param/contrast = 1.0
+shader_param/saturation = 1.0
+shader_param/redVal = 1.0
+shader_param/greenVal = 1.0
+shader_param/blueVal = 1.0
+shader_param/tint_color = Color( 0.203922, 0.992157, 0.843137, 1 )
+shader_param/tint_effect_factor = 0.678
+
+[sub_resource type="Shader" id=21]
+code = "shader_type canvas_item;
+
+// Gonkee's fog shader for Godot 3 - full tutorial https://youtu.be/QEaTsz_0o44
+// If you use this shader, I would prefer it if you gave credit to me and my channel
+
+uniform vec4 ori_color:hint_color = vec4(0.35, 0.48, 0.95,1.);
+//uniform vec3 color = vec3(0.35, 0.48, 0.95);
+uniform int OCTAVES = 4;
+
+float rand(vec2 coord){
+	return fract(sin(dot(coord, vec2(56, 78)) * 1000.0) * 1000.0);
+}
+
+float noise(vec2 coord){
+	vec2 i = floor(coord);
+	vec2 f = fract(coord);
+
+	// 4 corners of a rectangle surrounding our point
+	float a = rand(i);
+	float b = rand(i + vec2(1.0, 0.0));
+	float c = rand(i + vec2(0.0, 1.0));
+	float d = rand(i + vec2(1.0, 1.0));
+
+	vec2 cubic = f * f * (3.0 - 2.0 * f);
+
+	return mix(a, b, cubic.x) + (c - a) * cubic.y * (1.0 - cubic.x) + (d - b) * cubic.x * cubic.y;
+}
+
+float fbm(vec2 coord){
+	float value = 0.0;
+	float scale = 0.5;
+
+	for(int i = 0; i < OCTAVES; i++){
+		value += noise(coord) * scale;
+		coord *= 2.0;
+		scale *= 0.5;
+	}
+	return value;
+}
+
+void fragment() {
+	vec2 coord = UV * 20.0;
+
+	vec2 motion = vec2( fbm(coord + vec2(TIME * -0.5, TIME * 0.5)) );
+
+	float final = fbm(coord + motion);
+
+	COLOR = vec4(ori_color.rgb, final * 0.5);
+}"
+
+[sub_resource type="ShaderMaterial" id=19]
+shader = SubResource( 21 )
+shader_param/ori_color = Color( 0.0313726, 0.0392157, 0.0588235, 1 )
+shader_param/OCTAVES = 7
+
+[sub_resource type="DynamicFont" id=22]
+size = 96
+outline_size = 3
+outline_color = Color( 0.37, 0.29489, 0.0481, 1 )
+use_filter = true
+font_data = ExtResource( 11 )
+
+[sub_resource type="DynamicFont" id=23]
+size = 96
+outline_size = 3
+outline_color = Color( 0.37, 0.29489, 0.0481, 1 )
+use_filter = true
+font_data = ExtResource( 11 )
+
+[sub_resource type="ShaderMaterial" id=20]
+shader = ExtResource( 8 )
+shader_param/speed = 1.0
+shader_param/minStrength = 0.1
+shader_param/maxStrength = 0.03
+shader_param/strengthScale = 200.0
+shader_param/interval = 3.5
+shader_param/detail = 1.0
+shader_param/distortion = 1.0
+shader_param/heightOffset = 0.5
+shader_param/offset = 0.0
+
+[node name="Level" type="Node2D"]
+script = ExtResource( 10 )
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="Far" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0.4, 1 )
+motion_mirroring = Vector2( 1024, 0 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="BG" type="Sprite" parent="ParallaxBackground/Far"]
+position = Vector2( 512, 298 )
+texture = ExtResource( 3 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Medium" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0.5, 1 )
+motion_mirroring = Vector2( 1024, 0 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Close" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0.8, 1 )
+motion_mirroring = Vector2( 1024, 0 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="VeryClose" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0.9, 1 )
+motion_mirroring = Vector2( 1024, 0 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Tilemaps" type="Node2D" parent="."]
+position = Vector2( 0, 60 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Level" parent="Tilemaps" instance=ExtResource( 2 )]
+
+[node name="MapObjects" type="Node2D" parent="."]
+position = Vector2( 0, 60 )
+
+[node name="MessageAnchor" type="Node2D" parent="MapObjects"]
+position = Vector2( 154, 215 )
+
+[node name="Label" type="Label" parent="MapObjects/MessageAnchor"]
+margin_right = 40.0
+margin_bottom = 14.0
+custom_colors/font_color = Color( 0.929412, 0.745098, 0.121569, 1 )
+custom_fonts/font = SubResource( 24 )
+text = "Use A,W,S,D to move and space to jump"
+
+[node name="MessageAnchor2" type="Node2D" parent="MapObjects"]
+position = Vector2( 999, 330 )
+
+[node name="Label" type="Label" parent="MapObjects/MessageAnchor2"]
+margin_right = 40.0
+margin_bottom = 14.0
+custom_colors/font_color = Color( 0.929412, 0.745098, 0.121569, 1 )
+custom_fonts/font = SubResource( 24 )
+text = "Dont fall on the water..."
+
+[node name="MessageAnchor3" type="Node2D" parent="MapObjects"]
+position = Vector2( 1726, 297 )
+
+[node name="Label" type="Label" parent="MapObjects/MessageAnchor3"]
+margin_left = 20.0
+margin_top = 25.0
+margin_right = 218.0
+margin_bottom = 57.0
+custom_colors/font_color = Color( 0.929412, 0.745098, 0.121569, 1 )
+custom_fonts/font = SubResource( 24 )
+text = "or on the spikes..."
+
+[node name="MessageAnchor4" type="Node2D" parent="MapObjects"]
+position = Vector2( 1925, 26 )
+
+[node name="Label" type="Label" parent="MapObjects/MessageAnchor4"]
+margin_left = -21.0
+margin_top = 24.0
+margin_right = 284.0
+margin_bottom = 56.0
+custom_colors/font_color = Color( 0.929412, 0.745098, 0.121569, 1 )
+custom_fonts/font = SubResource( 24 )
+text = "You must catch these orbs"
+
+[node name="MessageAnchor6" type="Node2D" parent="MapObjects"]
+position = Vector2( 1327, 50 )
+
+[node name="Label" type="Label" parent="MapObjects/MessageAnchor6"]
+margin_left = 115.0
+margin_top = 58.0
+margin_right = 522.0
+margin_bottom = 90.0
+custom_colors/font_color = Color( 0.929412, 0.745098, 0.121569, 1 )
+custom_fonts/font = SubResource( 24 )
+text = "Jump and press shift to dash across"
+
+[node name="MessageAnchor5" type="Node2D" parent="MapObjects"]
+position = Vector2( 2576, 247 )
+
+[node name="Label" type="Label" parent="MapObjects/MessageAnchor5"]
+margin_left = -31.0
+margin_top = -30.0
+margin_right = 288.0
+margin_bottom = 37.0
+custom_colors/font_color = Color( 0.929412, 0.745098, 0.121569, 1 )
+custom_fonts/font = SubResource( 24 )
+text = "Aim and fire at the ghosts
+ with you left mouse button"
+align = 1
+
+[node name="Checkpoint" parent="MapObjects" instance=ExtResource( 4 )]
+position = Vector2( 4472, 517 )
+
+[node name="Finish" parent="MapObjects" instance=ExtResource( 12 )]
+position = Vector2( 4899, 517 )
+
+[node name="FadingWall" parent="MapObjects" instance=ExtResource( 5 )]
+position = Vector2( 4724, 413 )
+tile_data = PoolIntArray( -196608, 27, 0, -196607, 27, 1, -196606, 27, 1, -196605, 27, 1, -196604, 27, 1, -196603, 27, 1, -196602, 27, 1, -196601, 27, 1, -196600, 27, 1, -196599, 27, 1, -196598, 27, 1, -196597, 27, 2, -131072, 27, 65536, -131071, 27, 65537, -131070, 27, 65537, -131069, 27, 65537, -131068, 27, 65537, -131067, 27, 65537, -131066, 27, 65537, -131065, 27, 65537, -131064, 27, 65537, -131063, 27, 65537, -131062, 27, 65537, -131061, 27, 65538, -65536, 27, 65536, -65535, 27, 65537, -65534, 27, 65537, -65533, 27, 65537, -65532, 27, 65537, -65531, 27, 65537, -65530, 27, 65537, -65529, 27, 65537, -65528, 27, 65537, -65527, 27, 65537, -65526, 27, 65537, -65525, 27, 65538, 0, 27, 65536, 1, 27, 65537, 2, 27, 65537, 3, 27, 65537, 4, 27, 65537, 5, 27, 65537, 6, 27, 65537, 7, 27, 65537, 8, 27, 65537, 9, 27, 65537, 10, 27, 65537, 11, 27, 65538, 65536, 27, 65536, 65537, 27, 65537, 65538, 27, 65537, 65539, 27, 65537, 65540, 27, 65537, 65541, 27, 65537, 65542, 27, 65537, 65543, 27, 65537, 65544, 27, 65537, 65545, 27, 65537, 65546, 27, 65537, 65547, 27, 65538, 131072, 27, 131072, 131073, 27, 131073, 131074, 27, 131073, 131075, 27, 131073, 131076, 27, 131073, 131077, 27, 131073, 131078, 27, 131073, 131079, 27, 131073, 131080, 27, 131073, 131081, 27, 131073, 131082, 27, 131073, 131083, 27, 131074 )
+
+[node name="Player" parent="." instance=ExtResource( 1 )]
+unique_name_in_owner = true
+position = Vector2( 46, 505 )
+scale = Vector2( 0.5, 0.5 )
+h = 200.0
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+scale = Vector2( 8, 8 )
+current = true
+limit_left = 0
+limit_top = 0
+limit_right = 5400
+limit_bottom = 600
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Foreground" type="Node2D" parent="."]
+
+[node name="Tint" type="ColorRect" parent="Foreground"]
+visible = false
+material = SubResource( 18 )
+margin_right = 1023.0
+margin_bottom = 637.0
+color = Color( 0.117647, 0.105882, 0.105882, 1 )
+
+[node name="Darkness" type="Light2D" parent="Foreground"]
+visible = false
+light_mask = 7
+position = Vector2( 2839, 347 )
+scale = Vector2( 57.78, 14.6 )
+texture = ExtResource( 6 )
+energy = 0.85
+mode = 1
+range_layer_min = -101
+range_layer_max = 101
+range_item_cull_mask = 7
+
+[node name="HUDLayer" type="CanvasLayer" parent="."]
+
+[node name="Fog" type="ColorRect" parent="HUDLayer"]
+material = SubResource( 19 )
+margin_right = 1023.0
+margin_bottom = 637.0
+
+[node name="GameOver" type="Label" parent="HUDLayer"]
+visible = false
+margin_left = 183.0
+margin_top = 138.0
+margin_right = 849.0
+margin_bottom = 294.0
+custom_colors/font_color = Color( 0.929412, 0.745098, 0.121569, 1 )
+custom_fonts/font = SubResource( 22 )
+text = "GAME OVER"
+
+[node name="LevelComplete" type="Label" parent="HUDLayer"]
+visible = false
+margin_left = 183.0
+margin_top = 138.0
+margin_right = 849.0
+margin_bottom = 294.0
+custom_colors/font_color = Color( 0.929412, 0.745098, 0.121569, 1 )
+custom_fonts/font = SubResource( 23 )
+text = "Level 
+Complete"
+align = 1
+
+[node name="Sounds" type="Node2D" parent="."]
+
+[node name="StartLevel" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource( 14 )
+volume_db = -80.0
+bus = "sfx"
+
+[node name="GameOver" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource( 13 )
+volume_db = -80.0
+bus = "sfx"
+
+[node name="LevelComplete" type="AudioStreamPlayer" parent="Sounds"]
+stream = ExtResource( 15 )
+volume_db = -80.0
+bus = "sfx"
+
+[node name="ForegroundParalax" type="ParallaxBackground" parent="."]
+layer = 100
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ForegroundParalax"]
+motion_scale = Vector2( 1.2, 1 )
+motion_mirroring = Vector2( 1024, 0 )
+
+[node name="MushroomBig2" type="Sprite" parent="ForegroundParalax/ParallaxLayer"]
+material = SubResource( 20 )
+position = Vector2( 82, 548 )
+texture = ExtResource( 7 )
+region_enabled = true
+region_rect = Rect2( 320, 384, 192, 192 )
+
+[node name="MushrromMed" type="Sprite" parent="ForegroundParalax/ParallaxLayer"]
+material = SubResource( 20 )
+position = Vector2( 259, 577 )
+texture = ExtResource( 7 )
+region_enabled = true
+region_rect = Rect2( 384, 640, 128, 128 )
+
+[node name="MushroomBig" type="Sprite" parent="ForegroundParalax/ParallaxLayer"]
+material = SubResource( 20 )
+position = Vector2( 549, 557.5 )
+scale = Vector2( 0.895833, 0.880208 )
+texture = ExtResource( 7 )
+flip_h = true
+region_enabled = true
+region_rect = Rect2( 320, 384, 192, 192 )
+
+[node name="MushroomBig3" type="Sprite" parent="ForegroundParalax/ParallaxLayer"]
+material = SubResource( 20 )
+position = Vector2( 892, 558 )
+scale = Vector2( 0.895833, 0.880208 )
+texture = ExtResource( 7 )
+region_enabled = true
+region_rect = Rect2( 320, 384, 192, 192 )
+
+[node name="BotSta" type="Sprite" parent="ForegroundParalax/ParallaxLayer"]
+position = Vector2( 659, 570 )
+scale = Vector2( 0.895833, 0.880208 )
+texture = ExtResource( 9 )
+flip_h = true
+region_rect = Rect2( 320, 384, 192, 192 )
+
+[node name="BotSta2" type="Sprite" parent="ForegroundParalax/ParallaxLayer"]
+position = Vector2( 672, 566 )
+scale = Vector2( 0.895833, 0.880208 )
+texture = ExtResource( 9 )
+region_rect = Rect2( 320, 384, 192, 192 )
+
+[node name="BotSta3" type="Sprite" parent="ForegroundParalax/ParallaxLayer"]
+position = Vector2( 776, 568 )
+scale = Vector2( 0.895833, 0.880208 )
+texture = ExtResource( 9 )
+flip_h = true
+region_rect = Rect2( 320, 384, 192, 192 )
+
+[node name="MushrromMed2" type="Sprite" parent="ForegroundParalax/ParallaxLayer"]
+material = SubResource( 20 )
+position = Vector2( 329, 595 )
+texture = ExtResource( 7 )
+region_enabled = true
+region_rect = Rect2( 384, 640, 128, 128 )
+
+[node name="MushrromMed5" type="Sprite" parent="ForegroundParalax/ParallaxLayer"]
+material = SubResource( 20 )
+position = Vector2( 961, 573 )
+texture = ExtResource( 7 )
+region_enabled = true
+region_rect = Rect2( 384, 640, 128, 128 )
+
+[node name="MushrromMed4" type="Sprite" parent="ForegroundParalax/ParallaxLayer"]
+material = SubResource( 20 )
+position = Vector2( 415, 577 )
+texture = ExtResource( 7 )
+region_enabled = true
+region_rect = Rect2( 256, 768, 128, 128 )
+
+[node name="MushrromMed3" type="Sprite" parent="ForegroundParalax/ParallaxLayer"]
+material = SubResource( 20 )
+position = Vector2( 189, 589 )
+scale = Vector2( 0.929688, 0.890625 )
+texture = ExtResource( 7 )
+region_enabled = true
+region_rect = Rect2( 384, 640, 128, 128 )
+
+[connection signal="checkpoint_full" from="MapObjects/Checkpoint" to="MapObjects/FadingWall" method="dissolve"]

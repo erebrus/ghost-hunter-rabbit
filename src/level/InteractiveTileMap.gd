@@ -20,7 +20,7 @@ func _replace_tiles_with_scenes(scene_dictionary:Dictionary = TILE_SCENES):
 			var obj_scene = scene_dictionary[tile_id]
 			_replace_tile_with_object(tile_id, tile_pos, obj_scene)
 	
-func _replace_tile_with_object(tile_id:int, tile_pos:Vector2, object_scene:PackedScene, parent: Node = get_tree().current_scene):
+func _replace_tile_with_object(tile_id:int, tile_pos:Vector2, object_scene:PackedScene, parent: Node = self):
 	#clear cel in tilemap
 
 		

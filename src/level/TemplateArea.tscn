@@ -1,0 +1,33 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://assets/resources/CaveArea.tres" type="TileSet" id=1]
+[ext_resource path="res://src/level/CaveArea.gd" type="Script" id=4]
+
+[node name="Level" type="Node2D"]
+script = ExtResource( 4 )
+
+[node name="BackgroundTilemap" type="TileMap" parent="."]
+z_index = -5
+tile_set = ExtResource( 1 )
+format = 1
+tile_data = PoolIntArray( 524297, 17, 0, 524298, 17, 0, 524303, 17, 65536, 524304, 17, 0, 524305, 17, 0, 524306, 17, 65536, 524313, 17, 0, 524314, 17, 0, 524315, 17, 0, 524316, 17, 0, 524317, 17, 0, 524318, 17, 0, 524323, 17, 0, 524324, 17, 0, 524325, 17, 0, 524326, 17, 0, 524327, 17, 0, 524328, 17, 0, 524345, 17, 0, 524346, 17, 0, 524347, 17, 0, 524348, 17, 0, 524349, 17, 0, 524350, 17, 0, 589839, 17, 65536, 589840, 17, 65536, 589841, 17, 65536, 589842, 17, 65536, 589849, 17, 65536, 589850, 17, 65536, 589851, 17, 65536, 589852, 17, 65536, 589853, 17, 65536, 589854, 17, 65536, 589855, 17, 65536, 589856, 17, 65536, 589857, 17, 65536, 589858, 17, 65536, 589859, 17, 65536, 589860, 17, 65536, 589861, 17, 65536, 589862, 17, 65536, 589863, 17, 65536, 589864, 17, 65536, 589865, 17, 65536, 589881, 17, 65536, 589882, 17, 65536, 589883, 17, 65536, 589884, 17, 65536, 589885, 17, 65536, 589886, 17, 65536 )
+
+[node name="Floor" type="TileMap" parent="."]
+z_index = -1
+tile_set = ExtResource( 1 )
+show_collision = true
+collision_mask = 6
+format = 1
+
+[node name="PlatformTilemap" type="TileMap" parent="."]
+z_index = -1
+tile_set = ExtResource( 1 )
+show_collision = true
+collision_layer = 16
+collision_mask = 6
+format = 1
+tile_data = PoolIntArray( 589834, 17, 65536 )
+
+[node name="Collectibles" type="Node2D" parent="."]
+
+[node name="Enemies" type="Node2D" parent="."]

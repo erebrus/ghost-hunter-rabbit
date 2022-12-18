@@ -19,6 +19,7 @@ func get_orbit_center():
 # XSM enters the root first, the the children
 func _on_enter(_args) -> void:
 	player = Globals.get_player()
+	owner.light.enabled=false
 
 
 # This function is called just after the state enters

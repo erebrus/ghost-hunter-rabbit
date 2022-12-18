@@ -11,7 +11,7 @@ var start_seed:float
 func _on_enter(_args) -> void:
 	start_seed = randf()
 	start_pos=owner.global_position
-
+	owner.get_node("Light2D").enabled=true
 
 # This function is called just after the state enters
 # XSM after_enters the children first, then the parent

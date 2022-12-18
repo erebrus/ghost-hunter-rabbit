@@ -10,7 +10,7 @@ extends State
 # XSM enters the root first, the the children
 func _on_enter(_args) -> void:
 	owner.move_to_capture_point()
-
+	owner.light.enabled=false
 
 # This function is called just after the state enters
 # XSM after_enters the children first, then the parent
