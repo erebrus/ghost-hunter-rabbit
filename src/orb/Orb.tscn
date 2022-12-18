@@ -269,10 +269,7 @@ next_state = NodePath("")
 
 [node name="Consume" type="Node" parent="XSM"]
 script = ExtResource( 10 )
-animation_player = NodePath("../../Sprite/AnimationPlayer")
-anim_on_enter = "implode"
-anim_times_to_play = 1
-on_anim_finished = 0
+animation_player = NodePath("")
 disabled = false
 debug_mode = false
 timed = false

@@ -159,7 +159,7 @@ func take_damage(source, damage):
 
 func update_hp():	
 	hp_bar.value = int(hp/max_hp*100)
-	hp_bar.visible = hp!=max_hp
+	hp_bar.visible = hp!=max_hp and hp != 0
 		
 
 func hit_by_beam(dmg):
@@ -188,7 +188,7 @@ func do_death():
 	#$ExplodingGhost.initialize(load("res://assets/gfx/npcs/good_scare.png"))
 	#sprite.visible=false
 	#yield(get_tree().create_timer(1),"timeout")
-	var tween = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	var tween = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	tween.tween_property(sprite,"modulate", Color(1,1,1,0), 1)
 	yield(tween, "finished")
 	queue_free()

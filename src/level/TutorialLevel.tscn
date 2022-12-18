@@ -2,7 +2,7 @@
 
 [ext_resource path="res://src/player/Hunter.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/level/TutorialArea.tscn" type="PackedScene" id=2]
-[ext_resource path="res://assets/gfx/png1x/bg-cave.png" type="Texture" id=3]
+[ext_resource path="res://assets/gfx/png1x/bg-cave - 2048.png" type="Texture" id=3]
 [ext_resource path="res://src/level/Checkpoint.tscn" type="PackedScene" id=4]
 [ext_resource path="res://src/level/FadingWall.tscn" type="PackedScene" id=5]
 [ext_resource path="res://assets/gfx/lights/white.png" type="Texture" id=6]
@@ -180,39 +180,16 @@ script = ExtResource( 10 )
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
 
 [node name="Far" type="ParallaxLayer" parent="ParallaxBackground"]
-motion_scale = Vector2( 0.4, 1 )
-motion_mirroring = Vector2( 1024, 0 )
+motion_scale = Vector2( 0.4, 0.2 )
+motion_offset = Vector2( 0, -256 )
+motion_mirroring = Vector2( 2048, 0 )
 __meta__ = {
 "_edit_lock_": true
 }
 
 [node name="BG" type="Sprite" parent="ParallaxBackground/Far"]
-position = Vector2( 512, 298 )
+position = Vector2( 580, 66 )
 texture = ExtResource( 3 )
-__meta__ = {
-"_edit_lock_": true
-}
-
-[node name="Medium" type="ParallaxLayer" parent="ParallaxBackground"]
-motion_scale = Vector2( 0.5, 1 )
-motion_mirroring = Vector2( 1024, 0 )
-__meta__ = {
-"_edit_lock_": true
-}
-
-[node name="Close" type="ParallaxLayer" parent="ParallaxBackground"]
-motion_scale = Vector2( 0.8, 1 )
-motion_mirroring = Vector2( 1024, 0 )
-__meta__ = {
-"_edit_lock_": true
-}
-
-[node name="VeryClose" type="ParallaxLayer" parent="ParallaxBackground"]
-motion_scale = Vector2( 0.9, 1 )
-motion_mirroring = Vector2( 1024, 0 )
-__meta__ = {
-"_edit_lock_": true
-}
 
 [node name="Tilemaps" type="Node2D" parent="."]
 position = Vector2( 0, 60 )
@@ -315,7 +292,7 @@ h = 200.0
 scale = Vector2( 8, 8 )
 current = true
 limit_left = 0
-limit_top = 0
+limit_top = -1920
 limit_right = 5400
 limit_bottom = 600
 __meta__ = {
@@ -332,7 +309,6 @@ margin_bottom = 637.0
 color = Color( 0.117647, 0.105882, 0.105882, 1 )
 
 [node name="Darkness" type="Light2D" parent="Foreground"]
-visible = false
 light_mask = 7
 position = Vector2( 2839, 347 )
 scale = Vector2( 57.78, 14.6 )
