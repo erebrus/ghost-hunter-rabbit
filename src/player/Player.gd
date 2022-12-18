@@ -145,13 +145,15 @@ func play_celebration():
 func do_landing(_last_vy:float):
 #	pass
 	var dy = global_position.y - last_y
-#	Logger.info("v %s - landing delta y:%f ( %f - %f)" % [velocity, dy, global_position.y, last_y])
+	Logger.info("v %s - landing delta y:%f ( %f - %f)" % [velocity, dy, global_position.y, last_y])
 	var tween = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	tween.tween_property(sprite, "scale", Vector2(1,.9), .15)
 	tween.parallel().tween_property(sprite, "position", Vector2(10,-135), .15)
 	tween.tween_property(sprite, "scale", Vector2(1,1), .15).set_ease(Tween.EASE_IN)
 	tween.parallel().tween_property(sprite, "position", Vector2(10,-155), .15).set_ease(Tween.EASE_IN)
 
+	if dy > death_height:
+		do_element_death(true)
 #	if velocity.x<.5:
 #		Logger.info("correcting")
 #		velocity.x=0	
@@ -256,7 +258,12 @@ func control(_delta:float) -> void:
 			
 		else:
 			discard_jump=true
-					
+
+
+		if !is_on_floor() and velocity.y>0:
+			jump_requested=true
+			get_tree().create_timer(jump_buffer).connect("timeout",self,"reset_jump_buffer")
+
 #		if !is_on_floor(): #BOOST
 #			if velocity.y<0:
 #				velocity.y -= g * lift_factor * delta * delta_factor

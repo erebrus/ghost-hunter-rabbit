@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://assets/gfx/lights/white.png" type="Texture" id=1]
 [ext_resource path="res://src/level/vertical_fill.gdshader" type="Shader" id=2]
 [ext_resource path="res://assets/gfx/world/checkpoint_transparente.png" type="Texture" id=3]
 [ext_resource path="res://src/level/Checkpoint.gd" type="Script" id=4]
+[ext_resource path="res://assets/gfx/lights/nRmVV.png" type="Texture" id=5]
 
 [sub_resource type="ShaderMaterial" id=3]
 shader = ExtResource( 2 )
@@ -36,5 +37,13 @@ shape = SubResource( 4 )
 
 [node name="AbsortionPoint" type="Position2D" parent="."]
 position = Vector2( 46.5996, -111.3 )
+
+[node name="Light2D" type="Light2D" parent="."]
+light_mask = 7
+position = Vector2( -2, -115 )
+texture = ExtResource( 5 )
+texture_scale = 2.0
+color = Color( 0.921875, 0.871757, 0.702209, 1 )
+energy = 0.5
 
 [connection signal="body_entered" from="." to="." method="_on_Checkpoint_body_entered"]

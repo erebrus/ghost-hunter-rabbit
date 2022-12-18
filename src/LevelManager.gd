@@ -21,6 +21,10 @@ func start_tutorial():
 func start_game():
 	load_level(levels[1])
 	
+func restart_level():
+	load_level(levels[last_level])
+
+
 func on_level_complete(level):
 	last_level = level
 	var scn:String = MainMenuScene

@@ -41,9 +41,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_tree().change_scene("res://src/ui/MainMenuScreen.tscn")
 		
 	if Input.is_action_just_pressed("restart"):
-		restart()
+		LevelManager.restart_level()
 	
-func restart():
-	get_tree().change_scene("res://src/level/Level.tscn")
+
 
 	
