@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://assets/resources/CaveArea.tres" type="TileSet" id=1]
 [ext_resource path="res://src/orb/Orb.tscn" type="PackedScene" id=2]
@@ -7,7 +7,6 @@
 [ext_resource path="res://src/level/replaces/Spikes.tscn" type="PackedScene" id=5]
 [ext_resource path="res://src/level/replaces/Surf.tscn" type="PackedScene" id=6]
 [ext_resource path="res://src/level/replaces/DeepWater.tscn" type="PackedScene" id=7]
-[ext_resource path="res://src/level/FadingWall.tscn" type="PackedScene" id=8]
 
 [node name="Level" type="Node2D"]
 script = ExtResource( 4 )
@@ -16,7 +15,7 @@ script = ExtResource( 4 )
 tile_set = ExtResource( 1 )
 cell_size = Vector2( 32, 32 )
 format = 1
-tile_data = PoolIntArray( 393221, 17, 0, 458766, 26, 0, 524293, 17, 65536, 524296, 29, 0, 524298, 30, 0, 720966, 26, 0, 720968, 26, 0, 720970, 26, 0, 720972, 26, 0, 720974, 26, 0, 852037, 27, 1, 852039, 27, 1, 852041, 27, 1, 852043, 27, 1, 852045, 27, 1, 852047, 27, 1, 983092, 17, 0, 983094, 17, 0, 983096, 17, 0, 983098, 17, 0 )
+tile_data = PoolIntArray( 393221, 17, 0, 524293, 17, 65536, 720966, 26, 0, 720968, 26, 0, 720970, 26, 0, 720972, 26, 0, 720974, 26, 0, 852037, 27, 1, 852039, 27, 1, 852041, 27, 1, 852043, 27, 1, 852045, 27, 1, 852047, 27, 1, 983092, 17, 0, 983094, 17, 0, 983096, 17, 0, 983098, 17, 0 )
 script = ExtResource( 3 )
 TILE_SCENES = {
 26: ExtResource( 5 ),
@@ -40,13 +39,9 @@ tile_data = PoolIntArray( -1834982, 25, 0, -1703924, 0, 0, -1703923, 0, 1, -1703
 [node name="Collectibles" type="Node2D" parent="."]
 
 [node name="Orb" parent="Collectibles" instance=ExtResource( 2 )]
-position = Vector2( 1254, 201 )
+position = Vector2( 70, 407 )
 
 [node name="Orb2" parent="Collectibles" instance=ExtResource( 2 )]
 position = Vector2( 486, 413 )
 
 [node name="Enemies" type="Node2D" parent="."]
-
-[node name="FadingWall" parent="." instance=ExtResource( 8 )]
-position = Vector2( 3565, 350 )
-tile_data = PoolIntArray( -196608, 27, 0, -196607, 27, 1, -196606, 27, 1, -196605, 27, 1, -196604, 27, 2, -131072, 27, 65536, -131071, 27, 65537, -131070, 27, 65537, -131069, 27, 65537, -131068, 27, 65538, -65536, 27, 65536, -65535, 27, 65537, -65534, 27, 65537, -65533, 27, 65537, -65532, 27, 65538, 0, 27, 131072, 1, 27, 131073, 2, 27, 131073, 3, 27, 131073, 4, 27, 131074 )

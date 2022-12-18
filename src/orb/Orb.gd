@@ -5,6 +5,8 @@ signal burst(orb)
 
 enum State {ORBITING, GOING, RETURNING, ATTRACTED, ABSORTION}
 
+var checkpoint
+var offset
 #export(Vector2) var orbit_range:Vector2
 #export(float) var offset:float
 #export(float) var speed:float = 3
@@ -184,6 +186,27 @@ onready var xsm = $XSM
 #func get_light()->Light2D:
 #	return light
 
+func consume():
+	xsm.change_state("Consume")
+	
+	
+func do_delivery(_checkpoint):
+	checkpoint = _checkpoint
+	xsm.change_state("Delivery")
+	
+func move_to_capture_point():
+	z_index=1
+	var duration:float = checkpoint.get_capture_position().distance_to(global_position)/250
+	var tween = create_tween().set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
+	tween.tween_property(self, "global_position", checkpoint.get_capture_position(), duration)
+	yield(tween,"finished")
+	checkpoint.add_energy(100)
+	consume()
 
 func _on_Orb_body_entered(body):
-	queue_free()
+	if not xsm.is_active("Flicker"):
+		return
+	#if body == Globals.get_player():
+		#body.capture_orb()
+	xsm.change_state("Orbiting")
+	body.add_orb(self)

@@ -44,6 +44,8 @@ var discard_jump:=false
 var last_y:float
 var last_direction:Vector2
 var can_shoot:bool = true
+var orbs:Array = []
+
 
 onready var hp:float = max_hp
 onready var g:float = 2 * h / (th * th)
@@ -335,6 +337,17 @@ func do_death():
 	Globals.get_world().do_end()
 #	yield(get_tree().create_timer(3), "timeout")
 #	get_tree().quit()
+
+
+func add_orb(orb):
+	orb.offset = 2/PI*orbs.size()
+	orbs.append(orb)
+	
+	
+func on_checkpoint(checkpoint):
+	for orb in orbs:
+		orb.do_delivery(checkpoint)
+	orbs.clear()
 
 func do_element_death(do_ouch=false):
 	if dead:

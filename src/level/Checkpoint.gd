@@ -1,4 +1,6 @@
 extends Area2D
+signal checkpoint_full()
+
 
 export(float) var max_energy:float = 300
 export(float) var energy:float=0
@@ -14,17 +16,20 @@ func _ready() -> void:
 func update_level():
 	if not enabled:
 		return
-	var pct:float = energy/max_energy
-	
+	var pct:float = energy/max_energy	
 	deposit.material.set_shader_param("pct",pct)
 
 func _on_Checkpoint_body_entered(body: Node) -> void:
-	if body.has_method("consume_as_fuel"):
-		add_energy(body.consume_as_fuel(absortion_point.global_position))		
+	if body.has_method("on_checkpoint"):
+		body.on_checkpoint(self)	
 		
 func add_energy(delta:float):
-	yield(get_tree().create_timer(.3), "timeout")
+	
+	var tween = create_tween().set_trans(Tween.TRANS_CIRC).set_ease(Tween.EASE_OUT)
 	energy = clamp (energy + delta, 0, max_energy)
-	update_level()	
+	tween.tween_property(deposit.material, "shader_param/pct",  energy/max_energy, .3)
 	if energy == max_energy:
-		Globals.emit_signal("level_complete")
+		emit_signal("checkpoint_full")
+
+func get_capture_position():
+	return $AbsortionPoint.global_position
